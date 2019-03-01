@@ -1,10 +1,16 @@
 package com.springboot.service.impl;
 
+import com.springboot.dao.RegisterUserDao;
 import com.springboot.dao.StudentDao;
 import com.springboot.domain.Student;
+import com.springboot.enums.GradeType;
+import com.springboot.enums.SexType;
 import com.springboot.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class StudetServiceImpl implements StudentService {
@@ -12,24 +18,42 @@ public class StudetServiceImpl implements StudentService {
     @Autowired
     private StudentDao studentDao;
 
+    @Autowired
+    private RegisterUserDao registerUserDao;
 
     @Override
-    public Student findByEmail(String email) {
-        return studentDao.findByEmail(email);
+    public Integer getStudentId(String email) {
+
+        return null;
     }
 
     @Override
-    public Student findById(int id) {
-        return studentDao.findById(id);
+    public Map<String, Object> getStudentInfo(int id) {
+        Student student = studentDao.findById(id);
+        Map<String, Object> studentDetail = new HashMap<>();
+        studentDetail.put("email", student.getEmail());
+        studentDetail.put("name", student.getName());
+        studentDetail.put("studentNum", student.getStudentNum());
+        studentDetail.put("sex", student.getSex().getDescription());
+        studentDetail.put("age", student.getAge());
+        studentDetail.put("phoneNum", student.getPhoneNum());
+        studentDetail.put("grade", student.getGrade().getDescription());
+        return studentDetail;
     }
 
     @Override
-    public void modifyStudent(Student student) {
-        studentDao.modifyStudent(student);
+    public String updateStudentInfo(int id, String name, int age, int studentNum, SexType sex, int phoneNum, GradeType grade) {
+        Student studentModify = studentDao.findById(id);
+        studentModify.setName(name);
+        studentModify.setAge(age);
+        studentModify.setStudentNum(studentNum);
+        studentModify.setSex(sex);
+        studentModify.setPhoneNum(phoneNum);
+        studentModify.setGrade(grade);
+        studentDao.modifyStudent(studentModify);
+
+        return "修改成功";
     }
 
-    @Override
-    public void addStudent(Student student) {
-        studentDao.addStudent(student);
-    }
+
 }

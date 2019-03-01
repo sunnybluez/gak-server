@@ -1,12 +1,12 @@
 package com.springboot.demo;
 
+import com.springboot.dao.ManagerDao;
+import com.springboot.dao.RegisterUserDao;
+import com.springboot.dao.StudentDao;
+import com.springboot.dao.TeacherDao;
 import com.springboot.domain.RegisterUser;
 import com.springboot.domain.Student;
 import com.springboot.enums.UserIdentity;
-import com.springboot.service.ManagerService;
-import com.springboot.service.RegisterUserService;
-import com.springboot.service.StudentService;
-import com.springboot.service.TeacherService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +18,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ApplicationTests {
 
 	@Autowired
-	StudentService studentService;
+	StudentDao studentDao;
 
 	@Autowired
-	TeacherService teacherService;
+	TeacherDao teacherDao;
 
 	@Autowired
-	ManagerService managerService;
+	ManagerDao managerDao;
 
 	@Autowired
-	RegisterUserService registerUserService;
+	RegisterUserDao registerUserDao;
 
 
 
@@ -66,15 +66,15 @@ public class ApplicationTests {
 	}
 
 	public void addStudent(String email) {
-		registerUserService.addRegisterUser(new RegisterUser(
+		registerUserDao.addRegisterUser(new RegisterUser(
 				email,"e10adc3949ba59abbe56e057f20f883e", UserIdentity.STUDENT
 		));
 
-		RegisterUser registerUser = registerUserService.findByEmail("1@qq.com");
+		RegisterUser registerUser = registerUserDao.findByEmail("1@qq.com");
 		registerUser.setAuthenticated(true);
-		registerUserService.modifyRegisterUser(registerUser);
+		registerUserDao.modifyRegisterUser(registerUser);
 
-		studentService.addStudent(new Student(
+		studentDao.addStudent(new Student(
 				email,"e10adc3949ba59abbe56e057f20f883e"
 		));
 	}

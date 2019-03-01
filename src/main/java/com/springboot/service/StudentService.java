@@ -1,16 +1,19 @@
 package com.springboot.service;
 
-import com.springboot.domain.Student;
+import com.springboot.enums.GradeType;
+import com.springboot.enums.SexType;
+
+import java.util.Map;
 
 public interface StudentService {
 
-    Student findByEmail(String email);
+    Integer getStudentId(String email);
 
-    Student findById(int id);
+    Map<String, Object> getStudentInfo(int id);
 
-    void modifyStudent(Student student);
+    String updateStudentInfo(int id, String name, int age, int studentNum, SexType sex, int phoneNum, GradeType grade);
 
-    void addStudent(Student student);
+
 
 
 }

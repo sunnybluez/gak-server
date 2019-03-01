@@ -1,15 +1,17 @@
 package com.springboot.service;
 
-import com.springboot.domain.Teacher;
+import com.springboot.enums.SexType;
+
+import java.util.Map;
 
 public interface TeacherService {
 
-    Teacher findByEmail(String email);
+    Integer getTeacherId(String email);
 
-    void modifyTeacher(Teacher teacher);
+    Map<String, Object> getTeacherInfo(int id);
 
-    void addTeacher(Teacher teacher);
+    String updateTeacherInfo(int id, String name, int age, int teacherNum, SexType sex, int phoneNum);
 
-    Teacher findById(int id);
+
 
 }
