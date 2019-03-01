@@ -5,8 +5,11 @@ import com.springboot.enums.Term;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 发布课程的数据库实体类
@@ -15,6 +18,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class CourseRelease {
 
     @Id
@@ -40,4 +44,10 @@ public class CourseRelease {
     @Column
     @Enumerated(EnumType.STRING)            //课程学期
     private Term term;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    @Column
+    private Date releaseDate;
+
 }

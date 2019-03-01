@@ -4,8 +4,11 @@ import com.springboot.enums.ApproveState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 创建的课程的数据库实体类
@@ -14,6 +17,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class CourseCreate {
 
     @Id
@@ -27,5 +31,8 @@ public class CourseCreate {
     @Enumerated(EnumType.STRING)
     private ApproveState state;
 
-
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private Date createDate;
 }

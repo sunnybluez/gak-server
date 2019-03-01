@@ -3,6 +3,8 @@ package com.springboot.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,6 +16,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
 
     @Id
@@ -34,6 +37,7 @@ public class Post {
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     private Date initDate;                  //帖子创建日期
 
 }

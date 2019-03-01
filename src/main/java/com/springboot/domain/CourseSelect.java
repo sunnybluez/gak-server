@@ -4,6 +4,8 @@ import com.springboot.enums.SelectState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,6 +17,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class CourseSelect {
 
     @Id
@@ -33,6 +36,7 @@ public class CourseSelect {
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     private Date selectDate;                    //选取日期
 
     @Column

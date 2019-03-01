@@ -3,6 +3,8 @@ package com.springboot.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,6 +16,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Reply {
 
     @Id
@@ -31,6 +34,7 @@ public class Reply {
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     private Date initDate;          //回帖的时间
 
 }

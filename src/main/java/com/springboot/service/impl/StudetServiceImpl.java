@@ -23,8 +23,8 @@ public class StudetServiceImpl implements StudentService {
 
     @Override
     public Integer getStudentId(String email) {
-
-        return null;
+        Student student = studentDao.findByEmail(email);
+        return student.getId();
     }
 
     @Override
