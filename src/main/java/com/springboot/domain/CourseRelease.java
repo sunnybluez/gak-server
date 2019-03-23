@@ -1,15 +1,17 @@
 package com.springboot.domain;
 
 import com.springboot.enums.ApproveState;
+import com.springboot.enums.GradeType;
 import com.springboot.enums.Term;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 发布课程的数据库实体类
@@ -18,6 +20,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class CourseRelease {
 
@@ -25,14 +28,15 @@ public class CourseRelease {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
-    private int courseCreateId;             //对应的创建的课程的id
+//    @Column
+//    private int courseCreateId;             //对应的创建的课程的id
+//
+//    @Column
+//    private int teacherId;                  //对应的发布课程的老师id
 
     @Column
-    private int teacherId;                  //对应的发布课程的老师id
-
-    @Column
-    private String schedule;                //班次信息的描述
+    @Enumerated(EnumType.STRING)            //课程学期
+    private GradeType gradeType;
 
     @Column
     private int limitNum;                   //限选人数
@@ -49,5 +53,25 @@ public class CourseRelease {
     @CreatedDate
     @Column
     private Date releaseDate;
+
+    @ManyToOne( fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinColumn()
+    @NonNull
+    private Teacher teacher;
+
+    @ManyToOne( fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinColumn()
+    @NonNull
+    private CourseCreate courseCreate;
+
+    @OneToMany(mappedBy = "courseRelease",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<CourseSelect> courseSelectList;
+
+
+
+    @OneToMany(mappedBy = "courseRelease",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Homework> homework;
 
 }

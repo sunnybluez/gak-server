@@ -6,6 +6,7 @@ import com.springboot.annotation.TeacherAuth;
 import com.springboot.enums.UserIdentity;
 import com.springboot.exception.LimitAccessException;
 import com.springboot.exception.NotLoginError;
+import com.springboot.exception.TokenExpiredException;
 import com.springboot.utils.JwtHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ import java.lang.reflect.Method;
  */
 @Component
 @Slf4j
-public class TokenInterceptor extends HandlerInterceptorAdapter{
+public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     public TokenInterceptor() {
         super();
@@ -30,15 +31,25 @@ public class TokenInterceptor extends HandlerInterceptorAdapter{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        if(!(handler instanceof HandlerMethod))
+        if (!(handler instanceof HandlerMethod))
             return true;
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
 
         log.info("试图拦截" + method.getName());
         String token = request.getHeader("Authorization");
+
+
+        if (!(method.getName()).equals("error")) {
+            if (token != null && token != "" && JwtHelper.parseToken(token) == null) {
+                throw new TokenExpiredException();
+            }
+        }
+
+
         if (method.isAnnotationPresent(StudentAuth.class)) {
-            if(token==null|| token.equals("")){
+
+            if (token == null || token.equals("")) {
                 log.info("拦截成功,没有Token");
                 throw new NotLoginError();
 //                return false;
@@ -52,7 +63,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter{
         } else if (method.isAnnotationPresent(TeacherAuth.class)) {
 
 
-            if(token==null|| token.equals("")){
+            if (token == null || token.equals("")) {
                 log.info("拦截成功,没有Token");
                 throw new NotLoginError();
 //                return false;
@@ -65,7 +76,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter{
 
 //            return false;
         } else if (method.isAnnotationPresent(ManagerAuth.class)) {
-            if(token==null|| token.equals("")){
+            if (token == null || token.equals("")) {
                 log.info("拦截成功,没有Token");
                 throw new NotLoginError();
 //                return false;
@@ -115,5 +126,15 @@ public class TokenInterceptor extends HandlerInterceptorAdapter{
 //        return true;
 //
 //    }
+
+    public String test() throws Exception{
+        try {
+            int i = 100 / 0;
+            return "asdsad";
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
 }

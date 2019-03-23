@@ -41,7 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT")
+                .allowedMethods("*")
                 .maxAge(3600);
     }
 

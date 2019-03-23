@@ -2,8 +2,11 @@ package com.springboot.domain;
 
 import com.springboot.enums.SexType;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -47,6 +50,12 @@ public class Teacher {
     @Column
     private int phoneNum;
 
+    @OneToMany(mappedBy = "teacher",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<CourseCreate> courseCreateList;
 
+    @OneToMany(mappedBy = "teacher",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<CourseRelease> courseReleaseList;
 
 }

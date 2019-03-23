@@ -18,6 +18,10 @@ public class AccountController {
     private AccountService accountService;
 
 
+    @RequestMapping(value = "test")
+    public String test(){
+        return "test(1111)";
+    }
 
     @RequestMapping(value = "login")
     public String login(String email, String password, String identity) {
