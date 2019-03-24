@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class StudetServiceImpl implements StudentService {
+public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private StudentDao studentDao;

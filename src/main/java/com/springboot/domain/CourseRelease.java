@@ -1,6 +1,7 @@
 package com.springboot.domain;
 
 import com.springboot.enums.ApproveState;
+import com.springboot.enums.CourseState;
 import com.springboot.enums.GradeType;
 import com.springboot.enums.Term;
 import lombok.*;
@@ -35,18 +36,27 @@ public class CourseRelease {
 //    private int teacherId;                  //对应的发布课程的老师id
 
     @Column
-    @Enumerated(EnumType.STRING)            //课程学期
+    @Enumerated(EnumType.STRING)            //课程学生类型
+    @NonNull
     private GradeType gradeType;
 
     @Column
+    @Enumerated(EnumType.STRING)            //课程选课状态
+    @NonNull
+    private CourseState courseState;
+
+    @Column
+    @NonNull
     private int limitNum;                   //限选人数
 
     @Column
     @Enumerated(EnumType.STRING)
+    @NonNull
     private ApproveState state;             //课程所处的审批状态
 
     @Column
     @Enumerated(EnumType.STRING)            //课程学期
+    @NonNull
     private Term term;
 
     @Temporal(TemporalType.TIMESTAMP)

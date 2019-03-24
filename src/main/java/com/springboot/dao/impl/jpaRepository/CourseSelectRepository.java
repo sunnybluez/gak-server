@@ -1,7 +1,14 @@
 package com.springboot.dao.impl.jpaRepository;
 
 import com.springboot.domain.CourseSelect;
+import com.springboot.enums.SelectState;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CourseSelectRepository extends JpaRepository<CourseSelect, Integer> {
+
+    List<CourseSelect> findAllByCourseReleaseIdAndState(int courseReleaseId, SelectState state);
+
+    CourseSelect findById(int id);
 }

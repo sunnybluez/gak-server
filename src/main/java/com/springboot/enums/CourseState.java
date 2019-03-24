@@ -1,15 +1,15 @@
 package com.springboot.enums;
 
-public enum SelectState {
-    ONGOING("进行中"),
-    FAILED("未选中"),
-    RETURNED("已退课"),   //
-    SELECTED("仅选");
+public enum CourseState {
+
+    BEGIN("开课"),
+    REELECT("补选"),
+    GENERAL("通选");
 
 
     private String description;
 
-    SelectState(String description) {
+    CourseState(String description) {
         this.description = description;
     }
 

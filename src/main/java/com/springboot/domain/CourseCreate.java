@@ -30,11 +30,17 @@ public class CourseCreate {
 //    private int teacherId;          //创办老师的id
 
     @Column
+    @NonNull
+    private String name;
+
+    @Column
+    @NonNull
     private String description;
 
 
     @Column
     @Enumerated(EnumType.STRING)
+    @NonNull
     private ApproveState state;
 
     @Column

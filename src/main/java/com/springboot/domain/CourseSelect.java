@@ -34,6 +34,7 @@ public class CourseSelect {
 
     @Column
     @Enumerated(EnumType.STRING)
+    @NonNull
     private SelectState state;                  //选课关系被选后的状态
 
     @Column
