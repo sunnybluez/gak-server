@@ -11,4 +11,6 @@ public interface CourseSelectRepository extends JpaRepository<CourseSelect, Inte
     List<CourseSelect> findAllByCourseReleaseIdAndState(int courseReleaseId, SelectState state);
 
     CourseSelect findById(int id);
+
+    List<CourseSelect> findAllByStudentIdAndState(int studentId, SelectState state);
 }

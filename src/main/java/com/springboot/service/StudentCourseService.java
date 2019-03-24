@@ -15,6 +15,9 @@ public interface StudentCourseService {
 
     String reelectCourse(int studentId, int courseReleaseId);
 
+    //某学期学生ongoing的课
+    List<CourseRelease> getMyOnCoursesByTerm(int studentId,Term term);
 
+    List<CourseRelease> getAllCanSelectCourseByTerm(int studentId, Term term);
 
 }

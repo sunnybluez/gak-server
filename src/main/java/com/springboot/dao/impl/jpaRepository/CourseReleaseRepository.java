@@ -2,6 +2,7 @@ package com.springboot.dao.impl.jpaRepository;
 
 import com.springboot.domain.CourseRelease;
 import com.springboot.enums.ApproveState;
+import com.springboot.enums.CourseState;
 import com.springboot.enums.Term;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,6 +13,9 @@ public interface CourseReleaseRepository extends JpaRepository<CourseRelease, In
 
     List<CourseRelease> findAllByTermAndState(Term term, ApproveState state);
 
+    List<CourseRelease> findByTermAndCourseState(Term term, CourseState courseState);
+
+//    List<CourseRelease> findByTermAndCourseState(Term term, CourseState courseState);
 
 }
 

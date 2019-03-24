@@ -4,7 +4,7 @@ public enum CourseState {
 
     BEGIN("开课"),
     REELECT("补选"),
-    GENERAL("通选");
+    FUCK("通选");
 
 
     private String description;

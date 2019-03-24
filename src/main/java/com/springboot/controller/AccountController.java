@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RestController
 //@CrossOrigin
 @Slf4j
@@ -24,9 +26,11 @@ public class AccountController {
     }
 
     @RequestMapping(value = "login")
-    public String login(String email, String password, String identity) {
+    public HashMap<String, Object> login(String email, String password, String identity) {
 
         log.info("访问login");
+//        System.out.println(identity);
+
         UserIdentity userIdentity = UserIdentity.valueOf(identity.toUpperCase());
         return accountService.login(email, password, userIdentity);
 

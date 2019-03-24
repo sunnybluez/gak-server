@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.HashMap;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -38,16 +39,16 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public String login(String email, String password, UserIdentity identity) {
+    public HashMap<String, Object> login(String email, String password, UserIdentity identity) {
 
         String token = "";
-
+        HashMap<String, Object> result = new HashMap<>();
         RegisterUser registerUser = registerUserDao.findByEmail(email);
         if (registerUser == null) {
             throw new WrongInfoException();
         } else if (!registerUser.isAuthenticated()) {
             token = JwtHelper.getToken(email, identity.toString());
-            sendSimpleMail(email,token);
+            sendSimpleMail(email, token);
 
             throw new NotAuthenticateException();
         } else if (registerUser.getUserIdentity() != identity) {
@@ -56,10 +57,20 @@ public class AccountServiceImpl implements AccountService {
             throw new WrongInfoException();
         } else {
             token = JwtHelper.getToken(email, identity.toString());
+            result.put("token", token);
+//            result.put("id")
+            if (registerUser.getUserIdentity().equals(UserIdentity.STUDENT)) {
+                int studentId = studentDao.findByEmail(email).getId();
+                result.put("id", studentId);
+            } else if (registerUser.getUserIdentity().equals(UserIdentity.TEACHER)) {
+                int teacherId = teacherDao.findByEmail(email).getId();
+                result.put("id",teacherId);
+            }
+
         }
 
 
-        return token;
+        return result;
     }
 
     @Override

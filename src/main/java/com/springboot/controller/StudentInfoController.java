@@ -22,12 +22,7 @@ public class StudentInfoController {
 
 
 
-    @RequestMapping(value = "getStudentId")
-    @StudentAuth
-    public Integer getStudentId(String email) {
 
-        return studentService.getStudentId(email);
-    }
 
     @RequestMapping(value = "getStudentDetail")
     @StudentAuth

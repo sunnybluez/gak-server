@@ -17,5 +17,8 @@ public interface CourseSelectDao {
 
     CourseSelect findById(int courseSelectedId);
 
+    List<CourseSelect> findAllCSBySidAndState(int studentId, SelectState state);
+
+
 
 }

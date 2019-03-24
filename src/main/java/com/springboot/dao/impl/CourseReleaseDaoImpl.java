@@ -4,6 +4,7 @@ import com.springboot.dao.CourseReleaseDao;
 import com.springboot.dao.impl.jpaRepository.CourseReleaseRepository;
 import com.springboot.domain.CourseRelease;
 import com.springboot.enums.ApproveState;
+import com.springboot.enums.CourseState;
 import com.springboot.enums.Term;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -34,9 +35,16 @@ public class CourseReleaseDaoImpl implements CourseReleaseDao {
     }
 
     @Override
-    public List<CourseRelease> findAllPassCRByTerm(Term term, ApproveState state) {
+    public List<CourseRelease> findAllCRByTermAndState(Term term, ApproveState state) {
         return courseReleaseRepository.findAllByTermAndState(term, ApproveState.PASSED);
     }
+
+    @Override
+    public List<CourseRelease> findAllCRByTermAndCourseState(Term term, CourseState courseState) {
+        return courseReleaseRepository.findByTermAndCourseState(term, courseState);
+    }
+
+
 
 
 }

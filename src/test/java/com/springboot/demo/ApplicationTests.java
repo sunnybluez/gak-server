@@ -1,14 +1,8 @@
 package com.springboot.demo;
 
 import com.springboot.dao.*;
-import com.springboot.domain.CourseSelect;
-import com.springboot.domain.RegisterUser;
-import com.springboot.domain.Student;
-import com.springboot.domain.Teacher;
-import com.springboot.enums.GradeType;
-import com.springboot.enums.SelectState;
-import com.springboot.enums.Term;
-import com.springboot.enums.UserIdentity;
+import com.springboot.domain.*;
+import com.springboot.enums.*;
 import com.springboot.service.ManagerService;
 import com.springboot.service.StudentCourseService;
 import com.springboot.service.TeacherCourseService;
@@ -55,6 +49,9 @@ public class ApplicationTests {
 	@Autowired
 	CourseSelectDao courseSelectDao;
 
+	@Autowired
+	CourseReleaseDao courseReleaseDao;
+
 
 
 
@@ -62,7 +59,27 @@ public class ApplicationTests {
 	@Test
 	public void contextLoads() {
 		selectCourseTest();
+//		addStudent("1@qq.com");
+		testJPA();
 
+	}
+
+	@Test
+	public void testJPA(){
+		long start = System.currentTimeMillis();
+		List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRByTermAndCourseState(Term.SPRING2019, CourseState.BEGIN);
+		long end1 = System.currentTimeMillis();
+		System.out.println(end1 - start);
+
+//		long start1 = System.currentTimeMillis();
+//		List<CourseRelease> courseReleaseList1 = courseReleaseDao.findAllCRByTermAndCourseState(Term.SPRING2019, CourseState.BEGIN);
+//		long end = System.currentTimeMillis();
+//		System.out.println(end-start1);
+
+		long start11 = System.currentTimeMillis();
+		List<CourseRelease> courseReleaseList111 = courseReleaseDao.findAllCRByTermAndCourseState(Term.SPRING2019, CourseState.FUCK);
+		long end111 = System.currentTimeMillis();
+		System.out.println(end111-start11);
 	}
 
 	public void addStudent(String email) {
@@ -188,11 +205,15 @@ public class ApplicationTests {
 		approveCourseCreate(1, true);
 		addCourseCreate("5@qq.com", "数据库2", "第二堂数据库");
 		approveCourseCreate(2, true);
+        addCourseCreate("5@qq.com", "操作系统", "第二堂数据库");
+        approveCourseCreate(3, true);
 
-		releaseCourse(1, GradeType.FRESHMAN, 3, Term.SPRING2018);
+		releaseCourse(1, GradeType.FRESHMAN, 3, Term.SPRING2019);
 		approveCourseRelease(1, true);
-		releaseCourse(2, GradeType.FRESHMAN, 4, Term.SPRING2018);
+		releaseCourse(2, GradeType.FRESHMAN, 4, Term.SPRING2019);
 		approveCourseRelease(2, true);
+		releaseCourse(3, GradeType.FRESHMAN, 5, Term.SPRING2019);
+		approveCourseRelease(3, true);
 
 		selectCourse("1@qq.com", 1);
 		selectCourse("1@qq.com",1);
@@ -220,6 +241,16 @@ public class ApplicationTests {
 		System.out.println(studentCourseService.dropCourse(3));
 		System.out.println(studentCourseService.dropCourse(1));
 //		studentCourseService.
+
+		selectCourse("3@qq.com", 2);
+		selectCourse("3@qq.com", 3);
+//		teacherCourseService.beginClass(2);
+//		teacherCourseService.beginClass(3);
+
+//		List<CourseRelease> list = studentCourseService.getMyOnCoursesByTerm(3, Term.SPRING2019);
+//		System.out.println("几门课"+list.size());
 	}
+
+
 
 }

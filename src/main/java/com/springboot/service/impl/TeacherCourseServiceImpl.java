@@ -48,7 +48,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
     public String releaseCourse(int courseCreateId, GradeType gradeType, int limitNum, Term term) {
         CourseCreate courseCreate = courseCreateDao.findById(courseCreateId);
         Teacher teacher = courseCreate.getTeacher();
-        CourseRelease courseRelease = new CourseRelease(gradeType, CourseState.GENERAL,limitNum, ApproveState.WAITING, term, teacher, courseCreate);
+        CourseRelease courseRelease = new CourseRelease(gradeType,limitNum, ApproveState.WAITING, term, teacher, courseCreate);
         courseReleaseDao.addCourseRelease(courseRelease);
         return "success";
     }
@@ -95,7 +95,13 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
 
     @Override
     public String officialBeginClass(int courseReleaseId) {
+
+
         CourseRelease courseRelease = courseReleaseDao.findById(courseReleaseId);
+        if (!courseRelease.getCourseState().equals(CourseState.REELECT)) {
+            return "还没补选无法直接开课";
+        }
+
         courseRelease.setCourseState(CourseState.BEGIN);
         courseReleaseDao.modifyCourseRelease(courseRelease);
         return "success";

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class CourseSelectImpl implements CourseSelectDao {
+public class CourseSelectDaoImpl implements CourseSelectDao {
 
     @Autowired
     CourseSelectRepository courseSelectRepository;
@@ -34,4 +34,11 @@ public class CourseSelectImpl implements CourseSelectDao {
     public CourseSelect findById(int courseSelectedId) {
         return courseSelectRepository.findById(courseSelectedId);
     }
+
+    @Override
+    public List<CourseSelect> findAllCSBySidAndState(int studentId, SelectState state) {
+        return courseSelectRepository.findAllByStudentIdAndState(studentId, state);
+    }
+
+
 }

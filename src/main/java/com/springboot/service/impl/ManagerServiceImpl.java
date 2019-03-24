@@ -5,6 +5,7 @@ import com.springboot.dao.CourseReleaseDao;
 import com.springboot.domain.CourseCreate;
 import com.springboot.domain.CourseRelease;
 import com.springboot.enums.ApproveState;
+import com.springboot.enums.CourseState;
 import com.springboot.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class ManagerServiceImpl implements ManagerService {
         CourseRelease courseRelease = courseReleaseDao.findById(courseReleaseId);
         if(isApprove){
             courseRelease.setState(ApproveState.PASSED);
+            courseRelease.setCourseState(CourseState.FUCK);
             courseReleaseDao.modifyCourseRelease(courseRelease);
             return "审批通过";
 

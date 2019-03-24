@@ -13,6 +13,7 @@ import com.springboot.service.StudentCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,14 +34,14 @@ public class StudentCourseServiceImpl implements StudentCourseService {
 
     @Override
     public List<CourseRelease> getAllPassRCourseByTerm(Term term) {
-        return courseReleaseDao.findAllPassCRByTerm(term, ApproveState.PASSED);
+        return courseReleaseDao.findAllCRByTermAndState(term, ApproveState.PASSED);
     }
 
     @Override
     public String selectCourse(int studentId, int courseReleaseId) {
         // 检查选课时间是否有效
         CourseRelease courseRelease = courseReleaseDao.findById(courseReleaseId);
-        if (!courseRelease.getCourseState().equals(CourseState.GENERAL)) {
+        if (!courseRelease.getCourseState().equals(CourseState.FUCK)) {
             return "初选时间已过";
         }
 
@@ -133,6 +134,54 @@ public class StudentCourseServiceImpl implements StudentCourseService {
         //日志记录
         logStudentOperation(studentId, courseReleaseId, OperateType.SELECT);
         return "补选成功";
+
+    }
+
+    @Override
+    public List<CourseRelease> getMyOnCoursesByTerm(int studentId, Term term) {
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllCSBySidAndState(studentId, SelectState.ONGOING);
+        List<CourseRelease> courseReleaseList = new ArrayList<>();
+
+        for (CourseSelect courseSelect : courseSelectList) {
+            if (courseSelect.getCourseRelease().getTerm().equals(term)) {
+                courseReleaseList.add(courseSelect.getCourseRelease());
+            }
+        }
+        return courseReleaseList;
+
+    }
+
+    /**
+     * 有课程状态的课程肯定都是通过审批的所以这里就不加审批pass条件了
+     * @param studentId
+     * @param term
+     * @return
+     */
+    @Override
+    public List<CourseRelease> getAllCanSelectCourseByTerm(int studentId, Term term) {
+//        System.out.println(1);
+        long start = System.currentTimeMillis();
+        List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRByTermAndCourseState(term, CourseState.FUCK);
+//        System.out.println(2);
+        long end = System.currentTimeMillis();
+        System.out.println((end - start)+"ms");
+
+        List<Integer> releaseIdList = new ArrayList<>();
+        List<CourseSelect> courseSelectList = studentDao.findById(studentId).getCourseSelectList();
+        for (CourseSelect courseSelect : courseSelectList) {
+            if (courseSelect.getState().equals(SelectState.SELECTED)) {
+                releaseIdList.add(courseSelect.getCourseRelease().getId());
+            }
+        }
+//        System.out.println(3);
+        List<CourseRelease> resultList = new ArrayList<>();
+        for (CourseRelease courseRelease : courseReleaseList) {
+            if (!releaseIdList.contains(courseRelease.getId())) {
+                resultList.add(courseRelease);
+            }
+        }
+//        System.out.println(4);
+        return resultList;
 
     }
 
