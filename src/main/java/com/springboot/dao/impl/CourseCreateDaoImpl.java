@@ -32,7 +32,7 @@ public class CourseCreateDaoImpl implements CourseCreateDao {
     }
 
     @Override
-    public List<CourseCreate> getCreateAndPassCourse(int teacherId,ApproveState state) {
+    public List<CourseCreate> getAllCreateCourseByTIdAndAppState(int teacherId, ApproveState state) {
         return courseCreateRepository.findAllByTeacherIdAndState(teacherId, state);
     }
 }

@@ -1,6 +1,8 @@
 package com.springboot.controller;
 
 import com.springboot.annotation.StudentAuth;
+import com.springboot.annotation.TeacherAuth;
+import com.springboot.domain.CourseCreate;
 import com.springboot.domain.CourseRelease;
 import com.springboot.enums.Term;
 import com.springboot.service.CourseStatisticsService;
@@ -175,6 +177,25 @@ public class CourseInfoController {
         }
 
         return result;
+
+    }
+
+    @GetMapping(value = "getAllMyCreatePassCourseCreate")
+    @TeacherAuth
+    public List<HashMap<String, Object>> getAllMyCreatePassCourseCreate(int teacherId) {
+
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        List<CourseCreate> courseCreateList = teacherCourseService.getCreateAndPassCourses(teacherId);
+
+        for (CourseCreate courseCreate : courseCreateList) {
+            HashMap<String, Object> courseCreateJson = new HashMap<>();
+            courseCreateJson.put("id", courseCreate.getId());
+            courseCreateJson.put("name", courseCreate.getName());
+            courseCreateJson.put("description", courseCreate.getDescription());
+            result.add(courseCreateJson);
+        }
+        return result;
+
 
     }
 

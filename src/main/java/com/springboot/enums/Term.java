@@ -1,9 +1,9 @@
 package com.springboot.enums;
 
 public enum Term {
-    SPRING2018("学期2018春"),
-    AUTUMN2018("学期2018秋"),
-    SPRING2019("学期2019春");
+    SPRING2018("2018春"),
+    AUTUMN2018("2018秋"),
+    SPRING2019("2019春");
 
     private String description;
 
@@ -15,5 +15,10 @@ public enum Term {
         return description;
     }
 
-
+    public static Term parseCode(String desc){
+        for(Term s:Term.values()){
+            if(s.description.equalsIgnoreCase(desc))return s;
+        }
+        return null;
+    }
 }

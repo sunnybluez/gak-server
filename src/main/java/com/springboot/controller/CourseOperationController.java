@@ -25,16 +25,26 @@ public class CourseOperationController {
 
     @RequestMapping(value = "createCourse")
     @TeacherAuth
-    public String createCourse(int teacherId, String name, String description) {
-
-        return teacherCourseService.createCourse(teacherId, name, description);
+    @ResponseBody
+    public String createCourse(@RequestBody Map map) {
+        int teacherId = (int) map.get("teacherId");
+        String courseName = (String) map.get("courseName");
+        String courseDescription = (String) map.get("courseDescription");
+        return teacherCourseService.createCourse(teacherId, courseName, courseDescription);
     }
 
     @RequestMapping(value = "releaseCourse")
     @TeacherAuth
-    public String createCourse(int courseCreateId, String studentGradeType, int limitNum, String term) {
+    @ResponseBody
+    public String releaseCourse(@RequestBody Map map) {
+
+        int courseCreateId = (int) map.get("courseCreateId");
+        String studentGradeType = (String) map.get("studentGradeType");
+        int limitNum = (int) map.get("limitNum");
+        String term = (String) map.get("term");
+
         GradeType studentType = GradeType.parseCode(studentGradeType);
-        Term openTerm = Term.valueOf(term.toUpperCase());
+        Term openTerm = Term.parseCode(term);
         return teacherCourseService.releaseCourse(courseCreateId, studentType, limitNum, openTerm);
     }
 
@@ -49,6 +59,7 @@ public class CourseOperationController {
     public String officialBeginClass(int courseReleaseId) {
         return teacherCourseService.officialBeginClass(courseReleaseId);
     }
+
 
     @PostMapping(value = "selectCourse")
     @StudentAuth

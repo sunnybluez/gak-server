@@ -19,11 +19,6 @@ public class TeacherInfoController {
     @Autowired
     private TeacherService teacherService;
 
-    @RequestMapping(value = "getTeacherId")
-    @TeacherAuth
-    public Integer getTeacherId(String email) {
-        return teacherService.getTeacherId(email);
-    }
 
     @RequestMapping(value = "getTeacherDetail")
     @TeacherAuth

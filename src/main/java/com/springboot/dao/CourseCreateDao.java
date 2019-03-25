@@ -13,7 +13,7 @@ public interface CourseCreateDao {
 
     CourseCreate findById(int id);
 
-    List<CourseCreate> getCreateAndPassCourse(int teacherId,ApproveState state);
+    List<CourseCreate> getAllCreateCourseByTIdAndAppState(int teacherId, ApproveState state);
 
 //    List<>
 }

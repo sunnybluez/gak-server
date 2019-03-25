@@ -36,12 +36,12 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
         Teacher teacher = teacherDao.findById(teacherId);
         CourseCreate courseCreate = new CourseCreate(name, description, ApproveState.WAITING, teacher);
         courseCreateDao.addCourseCreate(courseCreate);
-        return "success";
+        return "创建成功";
     }
 
     @Override
     public List<CourseCreate> getCreateAndPassCourses(int teacherId) {
-        return courseCreateDao.getCreateAndPassCourse(teacherId,ApproveState.PASSED);
+        return courseCreateDao.getAllCreateCourseByTIdAndAppState(teacherId,ApproveState.PASSED);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
         Teacher teacher = courseCreate.getTeacher();
         CourseRelease courseRelease = new CourseRelease(gradeType,limitNum, ApproveState.WAITING, term, teacher, courseCreate);
         courseReleaseDao.addCourseRelease(courseRelease);
-        return "success";
+        return "提交审批";
     }
 
     @Override
