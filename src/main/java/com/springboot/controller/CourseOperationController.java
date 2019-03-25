@@ -61,13 +61,19 @@ public class CourseOperationController {
 
     @RequestMapping(value = "dropCourse")
     @StudentAuth
-    public String drop(int courseReleaseId) {
-        return studentCourseService.dropCourse(courseReleaseId);
+    @ResponseBody
+    public String dropCourse(@RequestBody Map map) {
+        int studentId = (int) map.get("studentId");
+        int courseReleaseId = (int) map.get("courseReleaseId");
+        return studentCourseService.dropCourse(studentId, courseReleaseId);
     }
 
-    @RequestMapping(value = "reelectCourse")
+    @PostMapping(value = "reelectCourse")
     @StudentAuth
-    public String reelectCourse(int studentId, int courseReleaseId) {
+    @ResponseBody
+    public String reelectCourse(@RequestBody Map map) {
+        int studentId = (int) map.get("studentId");
+        int courseReleaseId = (int) map.get("courseReleaseId");
         return studentCourseService.reelectCourse(studentId, courseReleaseId);
     }
 
