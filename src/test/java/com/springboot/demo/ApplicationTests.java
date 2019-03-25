@@ -60,14 +60,14 @@ public class ApplicationTests {
 	public void contextLoads() {
 		selectCourseTest();
 //		addStudent("1@qq.com");
-		testJPA();
+//		testJPA();
 
 	}
 
 	@Test
 	public void testJPA(){
 		long start = System.currentTimeMillis();
-		List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRByTermAndCourseState(Term.SPRING2019, CourseState.BEGIN);
+		List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRByTermAndCourseState(Term.SPRING2019, CourseState.GENERAL);
 		long end1 = System.currentTimeMillis();
 		System.out.println(end1 - start);
 
@@ -77,7 +77,7 @@ public class ApplicationTests {
 //		System.out.println(end-start1);
 
 		long start11 = System.currentTimeMillis();
-		List<CourseRelease> courseReleaseList111 = courseReleaseDao.findAllCRByTermAndCourseState(Term.SPRING2019, CourseState.FUCK);
+		List<CourseRelease> courseReleaseList111 = courseReleaseDao.findAllCRByTermAndCourseState(Term.SPRING2019, CourseState.GENERAL);
 		long end111 = System.currentTimeMillis();
 		System.out.println(end111-start11);
 	}

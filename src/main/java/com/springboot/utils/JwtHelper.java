@@ -15,7 +15,7 @@ public class JwtHelper {
 
     final static String base64EncodedSecretKey = "mySecretKey";//私钥
 
-    final static long TOKEN_EXP = 1000 * 60 * 15;//过期时间十五分钟
+    final static long TOKEN_EXP = 1000 * 60 *  60;//过期时间60分钟
 
 
     /**

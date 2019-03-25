@@ -24,7 +24,10 @@ public class CourseStatisticsServiceImpl implements CourseStatisticsService{
     public int getSelectNum(int courseReleaseId) {
 
         CourseRelease courseRelease = courseReleaseDao.findById(courseReleaseId);
-        List<CourseSelect> courseSelectList = courseRelease.getCourseSelectList();
+
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllByCRId(courseRelease.getId());
+
+
         int count = 0;
         for (CourseSelect courseSelect : courseSelectList) {
             if (courseSelect.getState().equals(SelectState.SELECTED)) {

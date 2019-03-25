@@ -3,11 +3,8 @@ package com.springboot.domain;
 import com.springboot.enums.GradeType;
 import com.springboot.enums.SexType;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Data
@@ -55,8 +52,8 @@ public class Student {
     @Column(columnDefinition = "bit(1) default false", nullable = false)
     private boolean cancelled;
 
-    @OneToMany(mappedBy = "student",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<CourseSelect> courseSelectList;
+
+
+
 
 }

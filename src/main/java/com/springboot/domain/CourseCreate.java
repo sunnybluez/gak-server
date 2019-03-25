@@ -2,14 +2,11 @@ package com.springboot.domain;
 
 import com.springboot.enums.ApproveState;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 创建的课程的数据库实体类
@@ -52,17 +49,5 @@ public class CourseCreate {
     @JoinColumn()
     @NonNull
     private Teacher teacher;
-
-    @OneToMany(mappedBy = "courseCreate",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<CourseRelease> courseReleaseList;
-
-    @OneToMany(mappedBy = "courseCreate",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<CourseWare> courseWareList;
-
-    @OneToMany(mappedBy = "courseCreate",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Post> postList;
 
 }

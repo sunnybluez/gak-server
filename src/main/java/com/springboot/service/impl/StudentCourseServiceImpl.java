@@ -41,14 +41,14 @@ public class StudentCourseServiceImpl implements StudentCourseService {
     public String selectCourse(int studentId, int courseReleaseId) {
         // 检查选课时间是否有效
         CourseRelease courseRelease = courseReleaseDao.findById(courseReleaseId);
-        if (!courseRelease.getCourseState().equals(CourseState.FUCK)) {
+        if (!courseRelease.getCourseState().equals(CourseState.GENERAL)) {
             return "初选时间已过";
         }
 
 
         //检查是否选过
         Student student = studentDao.findById(studentId);
-        List<CourseSelect> courseSelectList = student.getCourseSelectList();
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllByStudentId(student.getId());
 
         for (CourseSelect courseSelect : courseSelectList) {
             if (courseSelect.getCourseRelease().getId() == courseReleaseId
@@ -109,7 +109,7 @@ public class StudentCourseServiceImpl implements StudentCourseService {
 //        CourseSelect courseSelect = courseSelectDao.
         //检查是否属于曾经的落选或者退课人员
         Student student = studentDao.findById(studentId);
-        List<CourseSelect> courseSelectList = student.getCourseSelectList();
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllByStudentId(student.getId());
 
         for (CourseSelect courseSelect : courseSelectList) {
             if (courseSelect.getCourseRelease().getId() == courseReleaseId) {
@@ -160,14 +160,16 @@ public class StudentCourseServiceImpl implements StudentCourseService {
     @Override
     public List<CourseRelease> getAllCanSelectCourseByTerm(int studentId, Term term) {
 //        System.out.println(1);
-        long start = System.currentTimeMillis();
-        List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRByTermAndCourseState(term, CourseState.FUCK);
+//        long start = System.currentTimeMillis();
+        List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRByTermAndCourseState(term, CourseState.GENERAL);
 //        System.out.println(2);
-        long end = System.currentTimeMillis();
-        System.out.println((end - start)+"ms");
+//        long end = System.currentTimeMillis();
+//        System.out.println((end - start)+"ms");
 
         List<Integer> releaseIdList = new ArrayList<>();
-        List<CourseSelect> courseSelectList = studentDao.findById(studentId).getCourseSelectList();
+        Student student = studentDao.findById(studentId);
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllByStudentId(student.getId());
+
         for (CourseSelect courseSelect : courseSelectList) {
             if (courseSelect.getState().equals(SelectState.SELECTED)) {
                 releaseIdList.add(courseSelect.getCourseRelease().getId());
@@ -183,6 +185,11 @@ public class StudentCourseServiceImpl implements StudentCourseService {
 //        System.out.println(4);
         return resultList;
 
+    }
+
+    @Override
+    public List<CourseRelease> getAllCanReelectCourseByTerm(int studentId, Term term) {
+        return null;
     }
 
     public void logStudentOperation(int studentId, int courseReleaseId, OperateType operateType) {

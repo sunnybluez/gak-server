@@ -1,11 +1,8 @@
 package com.springboot.domain;
 
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * 作业题目的实体类
@@ -30,9 +27,7 @@ public class Homework {
     @Column
     private String title;                       //作业的标题
 
-    @OneToMany(mappedBy = "homework",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<StudentWork> studentWorkList;
+
 
     @ManyToOne( fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn()

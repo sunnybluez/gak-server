@@ -5,14 +5,11 @@ import com.springboot.enums.CourseState;
 import com.springboot.enums.GradeType;
 import com.springboot.enums.Term;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 发布课程的数据库实体类
@@ -42,7 +39,6 @@ public class CourseRelease {
 
     @Column
     @Enumerated(EnumType.STRING)            //课程选课状态
-    @NonNull
     private CourseState courseState;
 
     @Column
@@ -74,14 +70,5 @@ public class CourseRelease {
     @NonNull
     private CourseCreate courseCreate;
 
-    @OneToMany(mappedBy = "courseRelease",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<CourseSelect> courseSelectList;
-
-
-
-    @OneToMany(mappedBy = "courseRelease",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Homework> homework;
 
 }

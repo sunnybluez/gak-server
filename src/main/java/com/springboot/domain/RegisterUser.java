@@ -2,11 +2,8 @@ package com.springboot.domain;
 
 import com.springboot.enums.UserIdentity;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.List;
 
 
 @Entity
@@ -36,11 +33,5 @@ public class RegisterUser {
     @Column(columnDefinition = "bit(1) default false", nullable = false)
     private boolean authenticated;
 //
-    @OneToMany(mappedBy = "registerUser",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Reply> replyList;
 
-    @OneToMany(mappedBy = "registerUser",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Post> postList;
 }

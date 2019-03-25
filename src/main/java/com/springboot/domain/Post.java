@@ -1,14 +1,11 @@
 package com.springboot.domain;
 
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 论坛帖子
@@ -52,8 +49,5 @@ public class Post {
     @NonNull
     private RegisterUser registerUser;
 
-    @OneToMany(mappedBy = "registerUser",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Reply> replyList;
 
 }

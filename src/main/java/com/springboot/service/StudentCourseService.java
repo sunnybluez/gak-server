@@ -20,4 +20,6 @@ public interface StudentCourseService {
 
     List<CourseRelease> getAllCanSelectCourseByTerm(int studentId, Term term);
 
+    List<CourseRelease> getAllCanReelectCourseByTerm(int studentId, Term term);
+
 }

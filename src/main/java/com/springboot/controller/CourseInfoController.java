@@ -1,5 +1,6 @@
 package com.springboot.controller;
 
+import com.springboot.annotation.StudentAuth;
 import com.springboot.domain.CourseRelease;
 import com.springboot.enums.Term;
 import com.springboot.service.CourseStatisticsService;
@@ -7,6 +8,7 @@ import com.springboot.service.StudentCourseService;
 import com.springboot.service.TeacherCourseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,8 +31,8 @@ public class CourseInfoController {
     CourseStatisticsService courseStatisticsService;
 
     //term必须是 SPRING2019的形式
-    @RequestMapping(value = "getAllMyOnCourseByTerm")
-//    @StudentAuth
+    @GetMapping(value = "getAllMyOnCourseByTerm")
+    @StudentAuth
     public HashMap<Integer, String> getAllMyOnCourseByTerm(int studentId, String term) {
         HashMap<Integer, String> result = new HashMap<>();
         Term termIn = Term.valueOf(term);
@@ -47,14 +49,15 @@ public class CourseInfoController {
 
     }
 
-    @RequestMapping(value = "getAllCanSelectCourseByTerm")
+    @GetMapping(value = "getAllCanSelectCourseByTerm")
 //    @StudentAuth
     public List<HashMap<String,Object>> getAllCanSelectCourseByTerm(int studentId, String term) {
-        System.out.println(studentId+term);
+
+
         List<HashMap<String, Object>> result = new ArrayList<>();
         Term termIn = Term.valueOf(term);
         List<CourseRelease> courseReleaseList = studentCourseService.getAllCanSelectCourseByTerm(studentId, termIn);
-        System.out.println("大小"+courseReleaseList.size());
+
         for (CourseRelease courseRelease : courseReleaseList) {
             HashMap<String, Object> courseJson = new HashMap<>();
             courseJson.put("name", courseRelease.getCourseCreate().getName());
@@ -67,7 +70,7 @@ public class CourseInfoController {
             courseJson.put("selectNum", selectNum);
             result.add(courseJson);
         }
-        System.out.println(1);
+
         return result;
 
     }

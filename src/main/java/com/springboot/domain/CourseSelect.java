@@ -2,14 +2,11 @@ package com.springboot.domain;
 
 import com.springboot.enums.SelectState;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 学生的选择，学生和选课的关系
@@ -55,8 +52,5 @@ public class CourseSelect {
     @NonNull
     private Student student;
 
-    @OneToMany(mappedBy = "courseSelect",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<StudentWork> studentWorkList;
 
 }

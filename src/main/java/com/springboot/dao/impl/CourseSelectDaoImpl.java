@@ -40,5 +40,15 @@ public class CourseSelectDaoImpl implements CourseSelectDao {
         return courseSelectRepository.findAllByStudentIdAndState(studentId, state);
     }
 
+    @Override
+    public List<CourseSelect> findAllByCRId(int courseReleaseId) {
+        return courseSelectRepository.findAllByCourseReleaseId(courseReleaseId);
+    }
+
+    @Override
+    public List<CourseSelect> findAllByStudentId(int studentId) {
+        return courseSelectRepository.findAllByStudentId(studentId);
+    }
+
 
 }

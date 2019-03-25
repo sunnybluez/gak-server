@@ -41,7 +41,7 @@ public class ManagerServiceImpl implements ManagerService {
         CourseRelease courseRelease = courseReleaseDao.findById(courseReleaseId);
         if(isApprove){
             courseRelease.setState(ApproveState.PASSED);
-            courseRelease.setCourseState(CourseState.FUCK);
+            courseRelease.setCourseState(CourseState.GENERAL);
             courseReleaseDao.modifyCourseRelease(courseRelease);
             return "审批通过";
 

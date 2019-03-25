@@ -8,8 +8,9 @@ import com.springboot.service.StudentCourseService;
 import com.springboot.service.TeacherCourseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -49,9 +50,12 @@ public class CourseOperationController {
         return teacherCourseService.officialBeginClass(courseReleaseId);
     }
 
-    @RequestMapping(value = "selectCourse")
+    @PostMapping(value = "selectCourse")
     @StudentAuth
-    public String selectCourse(int studentId, int courseReleaseId) {
+    @ResponseBody
+    public String selectCourse(@RequestBody Map map) {
+        int studentId = (int) map.get("studentId");
+        int courseReleaseId = (int) map.get("courseReleaseId");
         return studentCourseService.selectCourse(studentId, courseReleaseId);
     }
 
