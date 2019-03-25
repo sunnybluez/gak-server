@@ -18,5 +18,7 @@ public interface CourseSelectRepository extends JpaRepository<CourseSelect, Inte
 
     List<CourseSelect> findAllByStudentId(int studentId);
 
+    CourseSelect findByStudentIdAndCourseReleaseId(int studentId, int courseReleaseId);
+
 
 }

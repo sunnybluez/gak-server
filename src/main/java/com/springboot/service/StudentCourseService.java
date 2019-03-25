@@ -11,7 +11,7 @@ public interface StudentCourseService {
 
     String selectCourse(int studentId, int courseReleaseId);
 
-    String dropCourse(int courseSelectId);
+    String dropCourse(int studentId, int courseReleaseId);
 
     String reelectCourse(int studentId, int courseReleaseId);
 
@@ -21,5 +21,12 @@ public interface StudentCourseService {
     List<CourseRelease> getAllCanSelectCourseByTerm(int studentId, Term term);
 
     List<CourseRelease> getAllCanReelectCourseByTerm(int studentId, Term term);
+
+    List<CourseRelease> getAllSelectedCourseByTerm(int studentId, Term term);
+
+    List<CourseRelease> getAllFailedCourseByTerm(int studentId, Term term);
+
+    List<CourseRelease> getAllOngoingCourseByTerm(int studentId, Term term);
+
 
 }

@@ -9,6 +9,11 @@ import com.springboot.domain.CourseSelect;
 import com.springboot.domain.Student;
 import com.springboot.domain.StudentOperation;
 import com.springboot.enums.*;
+import com.springboot.exception.DuplicateSelectException;
+import com.springboot.exception.NoQuotaException;
+import com.springboot.exception.ReelectTimeOutException;
+import com.springboot.exception.SelectTimeOutException;
+import com.springboot.service.CourseStatisticsService;
 import com.springboot.service.StudentCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +36,9 @@ public class StudentCourseServiceImpl implements StudentCourseService {
     @Autowired
     StudentOperationDao studentOperationDao;
 
+    @Autowired
+    CourseStatisticsService courseStatisticsService;
+
 
     @Override
     public List<CourseRelease> getAllPassRCourseByTerm(Term term) {
@@ -42,7 +50,7 @@ public class StudentCourseServiceImpl implements StudentCourseService {
         // 检查选课时间是否有效
         CourseRelease courseRelease = courseReleaseDao.findById(courseReleaseId);
         if (!courseRelease.getCourseState().equals(CourseState.GENERAL)) {
-            return "初选时间已过";
+            throw new SelectTimeOutException();
         }
 
 
@@ -61,7 +69,7 @@ public class StudentCourseServiceImpl implements StudentCourseService {
                     logStudentOperation(studentId, courseReleaseId, OperateType.SELECT);
                     return "选课成功";
                 }else if(courseSelect.getState().equals(SelectState.SELECTED)){
-                    return "已选过该课";
+                    throw new DuplicateSelectException();
                 }
 
             }
@@ -77,16 +85,17 @@ public class StudentCourseServiceImpl implements StudentCourseService {
     }
 
     @Override  //默认只有select或者ongoing才会去退课 没做检查
-    public String dropCourse(int courseSelectId) {
-        CourseSelect courseSelect = courseSelectDao.findById(courseSelectId);
+    public String dropCourse(int studentId,int courseReleaseId) {
+
+        CourseSelect courseSelect = courseSelectDao.findByStudentIdAndCourseReleaseId(studentId, courseReleaseId);
         if (courseSelect.getCourseRelease().getCourseState().equals(CourseState.BEGIN)) {
-            return "已经开课无法退课";
+            throw new ReelectTimeOutException();
         }
 
         courseSelect.setState(SelectState.RETURNED);
         courseSelectDao.modifyCourseSelect(courseSelect);
         logStudentOperation(courseSelect.getStudent().getId(), courseSelect.getCourseRelease().getId(), OperateType.DROP);
-        return "退选成功";
+        return "退课成功";
     }
 
     @Override
@@ -94,16 +103,22 @@ public class StudentCourseServiceImpl implements StudentCourseService {
         //检查选课时间是否有效
         CourseRelease courseRelease = courseReleaseDao.findById(courseReleaseId);
         if (courseRelease.getState().equals(CourseState.BEGIN)) {
-            return "补选时间已过";
+            throw new ReelectTimeOutException();
         }
 
         //检查选课人数是否已满
-        List<CourseSelect> allCSinCRId = courseSelectDao.findAllCSByCRIdAndState(courseReleaseId, SelectState.ONGOING);
-        int count = allCSinCRId.size();
+//        List<CourseSelect> allCSinCRId = courseSelectDao.findAllCSByCRIdAndState(courseReleaseId, SelectState.ONGOING);
+//        int count = allCSinCRId.size();
+//        if (count < courseRelease.getLimitNum()) {
+//            System.out.println( "已选" + count + "人");
+//        }else {
+//            return "选课人数已满";
+//        }
+        int count = courseStatisticsService.getOngoingNum(courseReleaseId);
         if (count < courseRelease.getLimitNum()) {
             System.out.println( "已选" + count + "人");
         }else {
-            return "选课人数已满";
+            throw new NoQuotaException();
         }
 
 //        CourseSelect courseSelect = courseSelectDao.
@@ -118,12 +133,12 @@ public class StudentCourseServiceImpl implements StudentCourseService {
 
                     courseSelect.setState(SelectState.ONGOING);
                     courseSelectDao.modifyCourseSelect(courseSelect);
-                    logStudentOperation(studentId, courseReleaseId, OperateType.SELECT);
+                    logStudentOperation(studentId, courseReleaseId, OperateType.REELECT);
                     return "补选成功";
                 } else if (courseSelect.getState().equals(SelectState.ONGOING)) {
-                    return "正在上课";
+                    throw new DuplicateSelectException();
                 }
-                return "出错 补选阶段出现初选";
+                throw new SelectTimeOutException();
             }
 
         }
@@ -132,7 +147,7 @@ public class StudentCourseServiceImpl implements StudentCourseService {
         CourseSelect courseSelect = new CourseSelect(SelectState.ONGOING, courseRelease, student);
         courseSelectDao.addCourseSelect(courseSelect);
         //日志记录
-        logStudentOperation(studentId, courseReleaseId, OperateType.SELECT);
+        logStudentOperation(studentId, courseReleaseId, OperateType.REELECT);
         return "补选成功";
 
     }
@@ -159,12 +174,8 @@ public class StudentCourseServiceImpl implements StudentCourseService {
      */
     @Override
     public List<CourseRelease> getAllCanSelectCourseByTerm(int studentId, Term term) {
-//        System.out.println(1);
-//        long start = System.currentTimeMillis();
+
         List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRByTermAndCourseState(term, CourseState.GENERAL);
-//        System.out.println(2);
-//        long end = System.currentTimeMillis();
-//        System.out.println((end - start)+"ms");
 
         List<Integer> releaseIdList = new ArrayList<>();
         Student student = studentDao.findById(studentId);
@@ -189,7 +200,69 @@ public class StudentCourseServiceImpl implements StudentCourseService {
 
     @Override
     public List<CourseRelease> getAllCanReelectCourseByTerm(int studentId, Term term) {
-        return null;
+        List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRByTermAndCourseState(term, CourseState.REELECT);
+
+        List<Integer> releaseIdList = new ArrayList<>();
+        Student student = studentDao.findById(studentId);
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllByStudentId(student.getId());
+
+        for (CourseSelect courseSelect : courseSelectList) {
+            if (courseSelect.getState().equals(SelectState.ONGOING)) {
+                releaseIdList.add(courseSelect.getCourseRelease().getId());
+            }
+        }
+        List<CourseRelease> resultList = new ArrayList<>();
+        for (CourseRelease courseRelease : courseReleaseList) {
+            if (!releaseIdList.contains(courseRelease.getId())) {
+                resultList.add(courseRelease);
+            }
+        }
+//        System.out.println(4);
+        return resultList;
+    }
+
+    @Override
+    public List<CourseRelease> getAllSelectedCourseByTerm(int studentId, Term term) {
+
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllByStudentId(studentId);
+
+        List<CourseRelease> courseReleaseResults = new ArrayList<>();
+        for (CourseSelect courseSelect : courseSelectList) {
+            if (courseSelect.getState().equals(SelectState.SELECTED) && courseSelect.getCourseRelease().getTerm().equals(term)) {
+                courseReleaseResults.add(courseSelect.getCourseRelease());
+            }
+
+        }
+        return courseReleaseResults;
+
+    }
+
+    @Override
+    public List<CourseRelease> getAllFailedCourseByTerm(int studentId, Term term) {
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllByStudentId(studentId);
+
+        List<CourseRelease> courseReleaseResults = new ArrayList<>();
+        for (CourseSelect courseSelect : courseSelectList) {
+            if (courseSelect.getState().equals(SelectState.FAILED) && courseSelect.getCourseRelease().getTerm().equals(term)) {
+                courseReleaseResults.add(courseSelect.getCourseRelease());
+            }
+
+        }
+        return courseReleaseResults;
+    }
+
+    @Override
+    public List<CourseRelease> getAllOngoingCourseByTerm(int studentId, Term term) {
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllByStudentId(studentId);
+
+        List<CourseRelease> courseReleaseResults = new ArrayList<>();
+        for (CourseSelect courseSelect : courseSelectList) {
+            if (courseSelect.getState().equals(SelectState.ONGOING) && courseSelect.getCourseRelease().getTerm().equals(term)) {
+                courseReleaseResults.add(courseSelect.getCourseRelease());
+            }
+
+        }
+        return courseReleaseResults;
     }
 
     public void logStudentOperation(int studentId, int courseReleaseId, OperateType operateType) {

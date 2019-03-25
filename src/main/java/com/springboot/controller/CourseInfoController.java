@@ -50,7 +50,7 @@ public class CourseInfoController {
     }
 
     @GetMapping(value = "getAllCanSelectCourseByTerm")
-//    @StudentAuth
+    @StudentAuth
     public List<HashMap<String,Object>> getAllCanSelectCourseByTerm(int studentId, String term) {
 
 
@@ -64,8 +64,8 @@ public class CourseInfoController {
             courseJson.put("teacher", courseRelease.getTeacher().getName());
             courseJson.put("limitNum", courseRelease.getLimitNum());
             courseJson.put("description", courseRelease.getCourseCreate().getDescription());
-            courseJson.put("id", courseRelease.getId());
 
+            courseJson.put("id", courseRelease.getId());
             int selectNum = courseStatisticsService.getSelectNum(courseRelease.getId());
             courseJson.put("selectNum", selectNum);
             result.add(courseJson);
@@ -74,4 +74,111 @@ public class CourseInfoController {
         return result;
 
     }
+
+
+    @GetMapping(value = "getAllCanReelectCourseByTerm")
+    @StudentAuth
+    public List<HashMap<String,Object>> getAllCanReelectCourseByTerm(int studentId, String term) {
+
+
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        Term termIn = Term.valueOf(term);
+        List<CourseRelease> courseReleaseList = studentCourseService.getAllCanReelectCourseByTerm(studentId, termIn);
+
+        for (CourseRelease courseRelease : courseReleaseList) {
+
+            HashMap<String, Object> courseJson = new HashMap<>();
+            courseJson.put("name", courseRelease.getCourseCreate().getName());
+            courseJson.put("teacher", courseRelease.getTeacher().getName());
+            courseJson.put("description", courseRelease.getCourseCreate().getDescription());
+            courseJson.put("limitNum", courseRelease.getLimitNum());
+            courseJson.put("id", courseRelease.getId());
+            int selectNum = courseStatisticsService.getOngoingNum(courseRelease.getId());
+            courseJson.put("selectNum", selectNum);
+            result.add(courseJson);
+        }
+
+        return result;
+
+    }
+
+    @GetMapping(value = "getAllSelectedCourseByTerm")
+    @StudentAuth
+    public List<HashMap<String,Object>> getAllSelectedCourseByTerm(int studentId, String term) {
+
+
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        Term termIn = Term.valueOf(term);
+        List<CourseRelease> courseReleaseList = studentCourseService.getAllSelectedCourseByTerm(studentId, termIn);
+
+        for (CourseRelease courseRelease : courseReleaseList) {
+            HashMap<String, Object> courseJson = new HashMap<>();
+            courseJson.put("name", courseRelease.getCourseCreate().getName());
+            courseJson.put("teacher", courseRelease.getTeacher().getName());
+            courseJson.put("description", courseRelease.getCourseCreate().getDescription());
+            courseJson.put("id", courseRelease.getId());
+            courseJson.put("limitNum", courseRelease.getLimitNum());
+            int selectNum = courseStatisticsService.getSelectNum(courseRelease.getId());
+            courseJson.put("selectNum", selectNum);
+            result.add(courseJson);
+        }
+
+        return result;
+
+    }
+
+    @GetMapping(value = "getAllFailedCourseByTerm")
+    @StudentAuth
+    public List<HashMap<String,Object>> getAllFailedCourseByTerm(int studentId, String term) {
+
+
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        Term termIn = Term.valueOf(term);
+        List<CourseRelease> courseReleaseList = studentCourseService.getAllFailedCourseByTerm(studentId, termIn);
+
+        for (CourseRelease courseRelease : courseReleaseList) {
+            HashMap<String, Object> courseJson = new HashMap<>();
+            courseJson.put("name", courseRelease.getCourseCreate().getName());
+            courseJson.put("description", courseRelease.getCourseCreate().getDescription());
+            courseJson.put("teacher", courseRelease.getTeacher().getName());
+            courseJson.put("id", courseRelease.getId());
+            courseJson.put("limitNum", courseRelease.getLimitNum());
+            int selectNum = courseStatisticsService.getOngoingNum(courseRelease.getId());
+            courseJson.put("selectNum", selectNum);
+            result.add(courseJson);
+        }
+
+        return result;
+
+    }
+
+    @GetMapping(value = "getAllOngoingCourseByTerm")
+    @StudentAuth
+    public List<HashMap<String,Object>> getAllOngoingCourseByTerm(int studentId, String term) {
+
+
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        Term termIn = Term.valueOf(term);
+        List<CourseRelease> courseReleaseList = studentCourseService.getAllOngoingCourseByTerm(studentId, termIn);
+
+        for (CourseRelease courseRelease : courseReleaseList) {
+            HashMap<String, Object> courseJson = new HashMap<>();
+            courseJson.put("name", courseRelease.getCourseCreate().getName());
+            courseJson.put("teacher", courseRelease.getTeacher().getName());
+            courseJson.put("description", courseRelease.getCourseCreate().getDescription());
+            courseJson.put("id", courseRelease.getId());
+
+            courseJson.put("limitNum", courseRelease.getLimitNum());
+            int selectNum = courseStatisticsService.getOngoingNum(courseRelease.getId());
+            courseJson.put("selectNum", selectNum);
+            result.add(courseJson);
+        }
+
+        return result;
+
+    }
+
+
+
+
 }

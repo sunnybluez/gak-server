@@ -23,4 +23,7 @@ public interface CourseSelectDao {
 
     List<CourseSelect> findAllByStudentId(int studentId);
 
+    CourseSelect findByStudentIdAndCourseReleaseId(int studentId, int courseReleaseId);
+
+
 }

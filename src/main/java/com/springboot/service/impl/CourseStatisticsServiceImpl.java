@@ -2,7 +2,6 @@ package com.springboot.service.impl;
 
 import com.springboot.dao.CourseReleaseDao;
 import com.springboot.dao.CourseSelectDao;
-import com.springboot.domain.CourseRelease;
 import com.springboot.domain.CourseSelect;
 import com.springboot.enums.SelectState;
 import com.springboot.service.CourseStatisticsService;
@@ -23,14 +22,29 @@ public class CourseStatisticsServiceImpl implements CourseStatisticsService{
     @Override
     public int getSelectNum(int courseReleaseId) {
 
-        CourseRelease courseRelease = courseReleaseDao.findById(courseReleaseId);
 
-        List<CourseSelect> courseSelectList = courseSelectDao.findAllByCRId(courseRelease.getId());
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllByCRId(courseReleaseId);
 
 
         int count = 0;
         for (CourseSelect courseSelect : courseSelectList) {
             if (courseSelect.getState().equals(SelectState.SELECTED)) {
+                count++;
+            }
+        }
+        return count;
+
+    }
+
+    @Override
+    public int getOngoingNum(int courseReleaseId) {
+        System.out.println("crid" + courseReleaseId);
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllByCRId(courseReleaseId);
+        System.out.println("list size" + courseSelectList.size());
+
+        int count = 0;
+        for (CourseSelect courseSelect : courseSelectList) {
+            if (courseSelect.getState().equals(SelectState.ONGOING)) {
                 count++;
             }
         }

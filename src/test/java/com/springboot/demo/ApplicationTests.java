@@ -207,20 +207,25 @@ public class ApplicationTests {
 		approveCourseCreate(2, true);
         addCourseCreate("5@qq.com", "操作系统", "第二堂数据库");
         approveCourseCreate(3, true);
+		addCourseCreate("5@qq.com", "数据结构算法", "数据结构课");
+		approveCourseCreate(4, true);
+
 
 		releaseCourse(1, GradeType.FRESHMAN, 3, Term.SPRING2019);
 		approveCourseRelease(1, true);
-		releaseCourse(2, GradeType.FRESHMAN, 4, Term.SPRING2019);
+		releaseCourse(2, GradeType.FRESHMAN, 1, Term.SPRING2019);
 		approveCourseRelease(2, true);
-		releaseCourse(3, GradeType.FRESHMAN, 5, Term.SPRING2019);
+		releaseCourse(3, GradeType.FRESHMAN, 1, Term.SPRING2019);
 		approveCourseRelease(3, true);
+		releaseCourse(4, GradeType.FRESHMAN, 5, Term.SPRING2019);
+		approveCourseRelease(4, true);
 
 		selectCourse("1@qq.com", 1);
-		selectCourse("1@qq.com",1);
-		studentCourseService.dropCourse(1);
+//		selectCourse("1@qq.com",1);
+		studentCourseService.dropCourse(1,1);
 		selectCourse("1@qq.com",1);
 		selectCourse("2@qq.com",1);
-		studentCourseService.dropCourse(2);
+		studentCourseService.dropCourse(2,1);
 		selectCourse("3@qq.com",1);
 		selectCourse("4@qq.com",1);
 		showSelectCondition(1);
@@ -228,27 +233,36 @@ public class ApplicationTests {
 		showSelectCondition(1);
 //		studentCourseService.dropCourse(2);
 //		studentCourseService.dropCourse(1);
-		selectCourse("6@qq.com",1);
-		showSelectCondition(1);
-		studentCourseService.dropCourse(1);
-		showSelectCondition(1);
+//		selectCourse("6@qq.com",1);
+//		showSelectCondition(1);
+		studentCourseService.dropCourse(1,1);
+//		showSelectCondition(1);
 		reelectCourse("6@qq.com",1);
-		showSelectCondition(1);
-		reelectCourse("1@qq.com",1);
-		showSelectCondition(1);
+//		showSelectCondition(1);
+//		reelectCourse("1@qq.com",1);
+//		showSelectCondition(1);
 
 		teacherCourseService.officialBeginClass(1);
-		System.out.println(studentCourseService.dropCourse(3));
-		System.out.println(studentCourseService.dropCourse(1));
+//		System.out.println(studentCourseService.dropCourse(3));
+//		System.out.println(studentCourseService.dropCourse(1));
 //		studentCourseService.
 
 		selectCourse("3@qq.com", 2);
-		selectCourse("3@qq.com", 3);
-//		teacherCourseService.beginClass(2);
+//		selectCourse("3@qq.com", 3);
+		teacherCourseService.beginClass(2);
 //		teacherCourseService.beginClass(3);
 
 //		List<CourseRelease> list = studentCourseService.getMyOnCoursesByTerm(3, Term.SPRING2019);
 //		System.out.println("几门课"+list.size());
+
+		selectCourse("3@qq.com", 4);
+
+
+		selectCourse("3@qq.com", 3);
+		selectCourse("1@qq.com", 3);
+		teacherCourseService.beginClass(3);
+
+
 	}
 
 
