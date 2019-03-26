@@ -211,6 +211,7 @@ public class ApplicationTests {
 		approveCourseCreate(4, true);
 
 
+
 		releaseCourse(1, GradeType.FRESHMAN, 3, Term.SPRING2019);
 		approveCourseRelease(1, true);
 		releaseCourse(2, GradeType.FRESHMAN, 1, Term.SPRING2019);
@@ -219,6 +220,9 @@ public class ApplicationTests {
 		approveCourseRelease(3, true);
 		releaseCourse(4, GradeType.FRESHMAN, 5, Term.SPRING2019);
 		approveCourseRelease(4, true);
+
+
+
 
 		selectCourse("1@qq.com", 1);
 //		selectCourse("1@qq.com",1);

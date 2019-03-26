@@ -41,7 +41,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
 
     @Override
     public List<CourseCreate> getCreateAndPassCourses(int teacherId) {
-        return courseCreateDao.getAllCreateCourseByTIdAndAppState(teacherId,ApproveState.PASSED);
+        return courseCreateDao.findAllCreateCourseByTIdAndAppState(teacherId,ApproveState.PASSED);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
 
         }
 
-        return "success";
+        return "结束通选";
     }
 
     @Override
@@ -104,7 +104,42 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
 
         courseRelease.setCourseState(CourseState.BEGIN);
         courseReleaseDao.modifyCourseRelease(courseRelease);
-        return "success";
+        return "结束补选";
+    }
+
+    @Override
+    public List<CourseCreate> getAllWaitingOrFailedCourseCreate(int teacherId) {
+        List<CourseCreate> courseCreates = courseCreateDao.findAllCreateCourseByTIdAndAppState(teacherId, ApproveState.WAITING);
+        List<CourseCreate> courseCreates1 = courseCreateDao.findAllCreateCourseByTIdAndAppState(teacherId, ApproveState.FAILED);
+        courseCreates.addAll(courseCreates1);
+        return courseCreates;
+    }
+
+    @Override
+    public List<CourseRelease> getAllWaitingOrFailedCourseRelease(int teacherId, Term term) {
+        List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRBByTermAndTIDAndAppState(teacherId, term, ApproveState.WAITING);
+        List<CourseRelease> courseReleaseList1 = courseReleaseDao.findAllCRBByTermAndTIDAndAppState(teacherId, term, ApproveState.FAILED);
+        courseReleaseList.addAll(courseReleaseList1);
+        return courseReleaseList;
+    }
+
+    @Override
+    public List<CourseRelease> getAllGeneralCourse(int teacherId, Term term) {
+        List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRBByTermAndTIDAndCouState(teacherId, term, CourseState.GENERAL);
+        return courseReleaseList;
+    }
+
+    @Override
+    public List<CourseRelease> getAllReelectCourse(int teacherId, Term term) {
+        List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRBByTermAndTIDAndCouState(teacherId, term, CourseState.REELECT);
+        return courseReleaseList;
+    }
+
+    @Override
+    public List<CourseRelease> getAllBeginCourse(int teacherId, Term term) {
+        List<CourseRelease> courseReleaseList = courseReleaseDao.findAllCRBByTermAndTIDAndCouState(teacherId, term, CourseState.BEGIN);
+        return courseReleaseList;
+
     }
 
 

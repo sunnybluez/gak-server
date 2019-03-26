@@ -13,7 +13,9 @@ public interface CourseCreateDao {
 
     CourseCreate findById(int id);
 
-    List<CourseCreate> getAllCreateCourseByTIdAndAppState(int teacherId, ApproveState state);
+    List<CourseCreate> findAllCreateCourseByTIdAndAppState(int teacherId, ApproveState state);
+
+//    List<CourseCreate> getAllCreateCourseByTidAndApprovaeState(int teacherId,App)
 
 //    List<>
 }

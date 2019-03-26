@@ -201,5 +201,107 @@ public class CourseInfoController {
 
 
 
+    @GetMapping(value = "getAllWaitingOrFailedCourseCreate")
+    @TeacherAuth
+    public List<HashMap<String, Object>> getAllWaitingOrFailedCourseCreate(int teacherId) {
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        List<CourseCreate> courseCreateList = teacherCourseService.getAllWaitingOrFailedCourseCreate(teacherId);
+
+        for (CourseCreate courseCreate : courseCreateList) {
+            HashMap<String, Object> courseCreateJson = new HashMap<>();
+            courseCreateJson.put("id", courseCreate.getId());
+
+            courseCreateJson.put("name", courseCreate.getName());
+            courseCreateJson.put("approveState", courseCreate.getState().getDescription());
+            result.add(courseCreateJson);
+        }
+        return result;
+    }
+
+    @GetMapping(value = "getAllWaitingOrFailedCourseRelease")
+    @TeacherAuth
+    public List<HashMap<String, Object>> getAllWaitingOrFailedCourseRelease(int teacherId, String term) {
+        Term termCu = Term.SPRING2019;
+        if(term!=null) termCu = Term.valueOf(term);
+
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        List<CourseRelease> courseReleaseList = teacherCourseService.getAllWaitingOrFailedCourseRelease(teacherId, termCu);
+
+        for (CourseRelease courseRelease : courseReleaseList) {
+
+            HashMap<String, Object> courseReleaseJson = new HashMap<>();
+            courseReleaseJson.put("id", courseRelease.getId());
+            courseReleaseJson.put("name", courseRelease.getCourseCreate().getName());
+            courseReleaseJson.put("approveState", courseRelease.getState().getDescription());
+            result.add(courseReleaseJson);
+        }
+        return result;
+    }
+
+    @GetMapping(value = "getAllGeneralCourse")
+    @TeacherAuth
+    public List<HashMap<String, Object>> getAllGeneralCourse(int teacherId, String term) {
+        Term termCu = Term.SPRING2019;
+        if(term!=null) termCu = Term.valueOf(term);
+
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        List<CourseRelease> courseReleaseList = teacherCourseService.getAllGeneralCourse(teacherId, termCu);
+
+        for (CourseRelease courseRelease : courseReleaseList) {
+            HashMap<String, Object> courseReleaseJson = new HashMap<>();
+            courseReleaseJson.put("id", courseRelease.getId());
+            courseReleaseJson.put("name", courseRelease.getCourseCreate().getName());
+            courseReleaseJson.put("limitNum", courseRelease.getLimitNum());
+            int count = courseStatisticsService.getSelectNum(courseRelease.getId());
+            courseReleaseJson.put("selectNum", count);
+            result.add(courseReleaseJson);
+        }
+        return result;
+    }
+
+    @GetMapping(value = "getAllReelectCourse")
+    @TeacherAuth
+    public List<HashMap<String, Object>> getAllReelectCourse(int teacherId, String term) {
+        Term termCu = Term.SPRING2019;
+        if(term!=null) termCu = Term.valueOf(term);
+
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        List<CourseRelease> courseReleaseList = teacherCourseService.getAllReelectCourse(teacherId, termCu);
+
+        for (CourseRelease courseRelease : courseReleaseList) {
+            HashMap<String, Object> courseReleaseJson = new HashMap<>();
+            courseReleaseJson.put("id", courseRelease.getId());
+            courseReleaseJson.put("name", courseRelease.getCourseCreate().getName());
+            courseReleaseJson.put("limitNum", courseRelease.getLimitNum());
+            int count = courseStatisticsService.getOngoingNum(courseRelease.getId());
+            courseReleaseJson.put("selectNum", count);
+            result.add(courseReleaseJson);
+        }
+        return result;
+    }
+
+    @GetMapping(value = "getAllBeginCourse")
+    @TeacherAuth
+    public List<HashMap<String, Object>> getAllBeginCourse(int teacherId, String term) {
+        Term termCu = Term.SPRING2019;
+        if(term!=null) termCu = Term.valueOf(term);
+
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        List<CourseRelease> courseReleaseList = teacherCourseService.getAllBeginCourse(teacherId, termCu);
+
+        for (CourseRelease courseRelease : courseReleaseList) {
+            HashMap<String, Object> courseReleaseJson = new HashMap<>();
+            courseReleaseJson.put("id", courseRelease.getId());
+            courseReleaseJson.put("name", courseRelease.getCourseCreate().getName());
+            int count = courseStatisticsService.getOngoingNum(courseRelease.getId());
+            courseReleaseJson.put("selectNum", count);
+            result.add(courseReleaseJson);
+        }
+        return result;
+    }
+
+
+
+
 
 }

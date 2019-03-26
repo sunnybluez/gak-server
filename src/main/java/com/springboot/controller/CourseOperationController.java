@@ -50,13 +50,17 @@ public class CourseOperationController {
 
     @RequestMapping(value = "beginClass")
     @TeacherAuth
-    public String beginClass(int courseReleaseId) {
+    @ResponseBody
+    public String beginClass(@RequestBody Map map) {
+        int courseReleaseId = (int) map.get("courseReleaseId");
         return teacherCourseService.beginClass(courseReleaseId);
     }
 
     @RequestMapping(value = "officialBeginClass")
     @TeacherAuth
-    public String officialBeginClass(int courseReleaseId) {
+    @ResponseBody
+    public String officialBeginClass(@RequestBody Map map) {
+        int courseReleaseId = (int) map.get("courseReleaseId");
         return teacherCourseService.officialBeginClass(courseReleaseId);
     }
 

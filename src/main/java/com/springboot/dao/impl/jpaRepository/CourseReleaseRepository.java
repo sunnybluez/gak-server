@@ -15,6 +15,11 @@ public interface CourseReleaseRepository extends JpaRepository<CourseRelease, In
 
     List<CourseRelease> findByTermAndCourseState(Term term, CourseState courseState);
 
+    List<CourseRelease> findAllByTermAndTeacherIdAndState(Term term, int teacherId, ApproveState state);
+
+
+    List<CourseRelease> findAllByTermAndTeacherIdAndCourseState(Term term, int teacherId, CourseState courseState);
+
 //    List<CourseRelease> findByTermAndCourseState(Term term, CourseState courseState);
 
 }
