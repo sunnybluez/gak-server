@@ -31,12 +31,10 @@ public class Student {
     @Column
     private String name;
 
-    @Column
-    private int studentNum;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private SexType sex;
+    private SexType sex = SexType.MALE;
 
     @Column
     private int age;
@@ -46,7 +44,7 @@ public class Student {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private GradeType grade;
+    private GradeType grade = GradeType.FRESHMAN;
 
 
     @Column(columnDefinition = "bit(1) default false", nullable = false)

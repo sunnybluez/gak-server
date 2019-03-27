@@ -29,6 +29,7 @@ public class Reply {
 //    private String userEmail;       //用户邮箱
 
     @Column
+    @NonNull
     private String content;         //回复的内容
 
     @Column

@@ -11,7 +11,7 @@ public interface StudentService {
 
     Map<String, Object> getStudentInfo(int id);
 
-    String updateStudentInfo(int id, String name, int age, int studentNum, SexType sex, int phoneNum, GradeType grade);
+    String updateStudentInfo(int id, String name, int age, SexType sex, int phoneNum, GradeType grade);
 
 
 

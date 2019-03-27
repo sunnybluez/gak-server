@@ -10,7 +10,7 @@ public interface TeacherService {
 
     Map<String, Object> getTeacherInfo(int id);
 
-    String updateTeacherInfo(int id, String name, int age, int teacherNum, SexType sex, int phoneNum);
+    String updateTeacherInfo(int id, String name, int age, SexType sex, int phoneNum);
 
 
 

@@ -6,6 +6,8 @@ import com.springboot.domain.Reply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class ReplyDaoImpl implements ReplyDao {
 
@@ -20,6 +22,11 @@ public class ReplyDaoImpl implements ReplyDao {
     @Override
     public Reply findById(int id) {
         return replyRepository.findById(id);
+    }
+
+    @Override
+    public List<Reply> findAllByPostId(int postId) {
+        return replyRepository.findAllByPostId(postId);
     }
 
 }

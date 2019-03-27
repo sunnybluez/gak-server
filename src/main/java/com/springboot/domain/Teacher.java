@@ -34,12 +34,10 @@ public class Teacher {
     @Column
     private String name;
 
-    @Column
-    private int teacherNum;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private SexType sex;
+    private SexType sex = SexType.MALE;
 
     @Column
     private int age;

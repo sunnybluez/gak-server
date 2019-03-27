@@ -29,7 +29,7 @@ public class TeacherServiceImpl implements TeacherService {
         Map<String, Object> teacherDetail = new HashMap<>();
         teacherDetail.put("email", teacher.getEmail());
         teacherDetail.put("name", teacher.getName());
-        teacherDetail.put("studentNum", teacher.getTeacherNum());
+//        teacherDetail.put("studentNum", teacher.getTeacherNum());
         teacherDetail.put("sex", teacher.getSex().getDescription());
         teacherDetail.put("age", teacher.getAge());
         teacherDetail.put("phoneNum", teacher.getPhoneNum());
@@ -37,11 +37,11 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public String updateTeacherInfo(int id, String name, int age, int teacherNum, SexType sex, int phoneNum) {
+    public String updateTeacherInfo(int id, String name, int age, SexType sex, int phoneNum) {
         Teacher teacherModify = teacherDao.findById(id);
         teacherModify.setName(name);
         teacherModify.setAge(age);
-        teacherModify.setTeacherNum(teacherNum);
+//        teacherModify.setTeacherNum(teacherNum);
         teacherModify.setSex(sex);
         teacherModify.setPhoneNum(phoneNum);
         teacherDao.modifyTeacher(teacherModify);

@@ -6,8 +6,7 @@ import com.springboot.enums.SexType;
 import com.springboot.service.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -20,7 +19,7 @@ public class TeacherInfoController {
     private TeacherService teacherService;
 
 
-    @RequestMapping(value = "getTeacherDetail")
+    @GetMapping(value = "getTeacherDetail")
     @TeacherAuth
     public Map<String,Object> getTeacherInfo(int id) {
         return teacherService.getTeacherInfo(id);
@@ -29,10 +28,15 @@ public class TeacherInfoController {
 
 
 
-    @RequestMapping(value = "updateTeacherInfo")
+    @PostMapping(value = "updateTeacherInfo")
     @TeacherAuth
-    public String updateTeacherInfo(int id, String name, int age, int teacherNum, String sex, int phoneNum) {
-        return teacherService.updateTeacherInfo(id, name, age, teacherNum, SexType.parseCode(sex),phoneNum);
+    public String updateTeacherInfo(@RequestBody Map map ) {
+        int id = (int) map.get("id");
+        String name = (String) map.get("name");
+        int age = (int) map.get("age");
+        String sex = (String) map.get("sex");
+        int phoneNum = (int) map.get("phoneNum");
+        return teacherService.updateTeacherInfo(id, name, age, SexType.parseCode(sex),phoneNum);
 
     }
 

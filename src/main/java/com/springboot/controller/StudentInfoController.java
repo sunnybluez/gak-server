@@ -7,8 +7,7 @@ import com.springboot.enums.SexType;
 import com.springboot.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -24,17 +23,24 @@ public class StudentInfoController {
 
 
 
-    @RequestMapping(value = "getStudentDetail")
+    @GetMapping(value = "getStudentDetail")
     @StudentAuth
     public Map<String,Object> getStudentInfo(int id) {
         return studentService.getStudentInfo(id);
     }
 
 
-    @RequestMapping(value = "updateStudentInfo")
+    @PostMapping(value = "updateStudentInfo")
     @StudentAuth
-    public String updateStudentInfo(int id, String name, int age, int studentNum, String sex, int phoneNum, String grade) {
-        return studentService.updateStudentInfo(id, name, age, studentNum, SexType.parseCode(sex), phoneNum, GradeType.parseCode(grade));
+    public String updateStudentInfo(@RequestBody Map map) {
+        int id = (int) map.get("id");
+        String name = (String) map.get("name");
+        int age = (int) map.get("age");
+        String sex = (String) map.get("sex");
+        int phoneNum = (int) map.get("phoneNum");
+        String grade = (String) map.get("grade");
+
+        return studentService.updateStudentInfo(id, name, age, SexType.parseCode(sex), phoneNum, GradeType.parseCode(grade));
     }
 
 }

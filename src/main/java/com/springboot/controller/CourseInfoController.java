@@ -4,19 +4,22 @@ import com.springboot.annotation.StudentAuth;
 import com.springboot.annotation.TeacherAuth;
 import com.springboot.domain.CourseCreate;
 import com.springboot.domain.CourseRelease;
+import com.springboot.domain.Post;
+import com.springboot.domain.Reply;
 import com.springboot.enums.Term;
 import com.springboot.service.CourseStatisticsService;
+import com.springboot.service.ForumService;
 import com.springboot.service.StudentCourseService;
 import com.springboot.service.TeacherCourseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -31,6 +34,9 @@ public class CourseInfoController {
 
     @Autowired
     CourseStatisticsService courseStatisticsService;
+
+    @Autowired
+    ForumService forumService;
 
     //term必须是 SPRING2019的形式
     @GetMapping(value = "getAllMyOnCourseByTerm")
@@ -317,6 +323,72 @@ public class CourseInfoController {
 
     }
 
+
+    @GetMapping(value = "getCourseCreateId")
+    public Integer getCourseCreateId(int courseReleaseId) {
+        CourseRelease courseRelease = courseStatisticsService.getCourseReleaseById(courseReleaseId);
+        return courseRelease.getCourseCreate().getId();
+    }
+
+
+
+    @GetMapping(value = "getPostListByCCId")
+    public List<HashMap<String, Object>> getPostListByCCId(int courseCreateId) {
+        List<HashMap<String, Object>> list =new ArrayList<>();
+        List<Post> posts = forumService.getPostListByCCId(courseCreateId);
+        for (Post post : posts) {
+            HashMap<String, Object> postJson = new HashMap<>();
+            postJson.put("id", post.getId());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String createDate = sdf.format(post.getInitDate());
+            postJson.put("date", createDate);
+
+            postJson.put("title", post.getTitle());
+            postJson.put("authorEmail", post.getRegisterUser().getEmail());
+            postJson.put("content", post.getContent());
+            list.add(postJson);
+        }
+        return list;
+    }
+
+    @GetMapping(value = "getReplyListByPostId")
+    public List<HashMap<String, Object>> getReplyListByPostId(int postId) {
+        List<HashMap<String, Object>> list =new ArrayList<>();
+        List<Reply> replyList = forumService.getReplyListByPostId(postId);
+        for (Reply reply : replyList) {
+            HashMap<String, Object> replyJson = new HashMap<>();
+            replyJson.put("id", reply.getId());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String createDate = sdf.format(reply.getInitDate());
+            replyJson.put("date", createDate);
+
+            replyJson.put("authorEmail", reply.getRegisterUser().getEmail());
+            replyJson.put("content", reply.getContent());
+            list.add(replyJson);
+        }
+        return list;
+    }
+
+    @PostMapping(value = "addPost")
+    @ResponseBody
+    public String addPost(@RequestBody Map map) {
+        int courseCreateId = (int) map.get("courseCreateId");
+        String email = (String) map.get("email");
+        String title = (String) map.get("title");
+        String content = (String) map.get("content");
+        return forumService.addPost(courseCreateId, email, title, content);
+    }
+
+    @PostMapping(value = "addReply")
+    @ResponseBody
+    public String addReply(@RequestBody Map map) {
+        int postId = (int) map.get("postId");
+        String email = (String) map.get("email");
+        String content = (String) map.get("content");
+        return forumService.addReply(postId, email, content);
+    }
 
 
 

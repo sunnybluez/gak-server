@@ -33,7 +33,7 @@ public class StudentServiceImpl implements StudentService {
         Map<String, Object> studentDetail = new HashMap<>();
         studentDetail.put("email", student.getEmail());
         studentDetail.put("name", student.getName());
-        studentDetail.put("studentNum", student.getStudentNum());
+//        studentDetail.put("studentNum", student.getStudentNum());
         studentDetail.put("sex", student.getSex().getDescription());
         studentDetail.put("age", student.getAge());
         studentDetail.put("phoneNum", student.getPhoneNum());
@@ -42,11 +42,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public String updateStudentInfo(int id, String name, int age, int studentNum, SexType sex, int phoneNum, GradeType grade) {
+    public String updateStudentInfo(int id, String name, int age, SexType sex, int phoneNum, GradeType grade) {
         Student studentModify = studentDao.findById(id);
         studentModify.setName(name);
         studentModify.setAge(age);
-        studentModify.setStudentNum(studentNum);
+//        studentModify.setStudentNum(studentNum);
         studentModify.setSex(sex);
         studentModify.setPhoneNum(phoneNum);
         studentModify.setGrade(grade);

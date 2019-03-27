@@ -26,12 +26,14 @@ public class Post {
 //    private int courseCreateId;             //因为论坛和创建的课程是1：1所以这里直接用创建的课程id当作帖子的外键
 
     @Column
+    @NonNull
     private String title;                   //帖子标题
 
 //    @Column
 //    private String userEmail;               //因为邮箱能够确定唯一的用户所以这里用邮箱
 
     @Column
+    @NonNull
     private String content;                 //帖子头帖描述
 
     @Column
