@@ -221,8 +221,12 @@ public class ApplicationTests {
 		releaseCourse(4, GradeType.FRESHMAN, 5, Term.SPRING2019);
 		approveCourseRelease(4, true);
 
+		releaseCourse(4, GradeType.FRESHMAN, 5, Term.AUTUMN2018);
+		approveCourseRelease(5, true);
 
 
+		selectCourse("3@qq.com", 5);
+		teacherCourseService.beginClass(5);
 
 		selectCourse("1@qq.com", 1);
 //		selectCourse("1@qq.com",1);

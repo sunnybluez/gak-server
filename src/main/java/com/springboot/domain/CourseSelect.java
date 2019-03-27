@@ -39,8 +39,6 @@ public class CourseSelect {
     @CreatedDate
     private Date selectDate;                    //选取日期
 
-    @Column
-    private double examScore;                   //考试分数
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn()

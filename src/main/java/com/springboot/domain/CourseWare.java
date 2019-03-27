@@ -22,7 +22,12 @@ public class CourseWare {
 //    private int courseCreateId;                 //创建的课程的id 外键
 
     @Column
-    private String content;                     //课件的存储path
+    @NonNull
+    private String name;                     //课件的存储path
+
+    @Column
+    @NonNull
+    private String path;                     //课件的存储path
 
     @ManyToOne( fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn()

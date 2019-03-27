@@ -2,6 +2,7 @@ package com.springboot.service.impl;
 
 import com.springboot.dao.CourseReleaseDao;
 import com.springboot.dao.CourseSelectDao;
+import com.springboot.domain.CourseRelease;
 import com.springboot.domain.CourseSelect;
 import com.springboot.enums.SelectState;
 import com.springboot.service.CourseStatisticsService;
@@ -50,5 +51,10 @@ public class CourseStatisticsServiceImpl implements CourseStatisticsService{
         }
         return count;
 
+    }
+
+    @Override
+    public CourseRelease getCourseReleaseById(int courseReleaseId) {
+        return courseReleaseDao.findById(courseReleaseId);
     }
 }

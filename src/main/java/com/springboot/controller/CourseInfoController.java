@@ -53,7 +53,7 @@ public class CourseInfoController {
 
     @GetMapping(value = "getAllCanSelectCourseByTerm")
     @StudentAuth
-    public List<HashMap<String,Object>> getAllCanSelectCourseByTerm(int studentId, String term) {
+    public List<HashMap<String, Object>> getAllCanSelectCourseByTerm(int studentId, String term) {
 
 
         List<HashMap<String, Object>> result = new ArrayList<>();
@@ -80,7 +80,7 @@ public class CourseInfoController {
 
     @GetMapping(value = "getAllCanReelectCourseByTerm")
     @StudentAuth
-    public List<HashMap<String,Object>> getAllCanReelectCourseByTerm(int studentId, String term) {
+    public List<HashMap<String, Object>> getAllCanReelectCourseByTerm(int studentId, String term) {
 
 
         List<HashMap<String, Object>> result = new ArrayList<>();
@@ -106,7 +106,7 @@ public class CourseInfoController {
 
     @GetMapping(value = "getAllSelectedCourseByTerm")
     @StudentAuth
-    public List<HashMap<String,Object>> getAllSelectedCourseByTerm(int studentId, String term) {
+    public List<HashMap<String, Object>> getAllSelectedCourseByTerm(int studentId, String term) {
 
 
         List<HashMap<String, Object>> result = new ArrayList<>();
@@ -131,7 +131,7 @@ public class CourseInfoController {
 
     @GetMapping(value = "getAllFailedCourseByTerm")
     @StudentAuth
-    public List<HashMap<String,Object>> getAllFailedCourseByTerm(int studentId, String term) {
+    public List<HashMap<String, Object>> getAllFailedCourseByTerm(int studentId, String term) {
 
 
         List<HashMap<String, Object>> result = new ArrayList<>();
@@ -156,7 +156,7 @@ public class CourseInfoController {
 
     @GetMapping(value = "getAllOngoingCourseByTerm")
     @StudentAuth
-    public List<HashMap<String,Object>> getAllOngoingCourseByTerm(int studentId, String term) {
+    public List<HashMap<String, Object>> getAllOngoingCourseByTerm(int studentId, String term) {
 
 
         List<HashMap<String, Object>> result = new ArrayList<>();
@@ -200,7 +200,6 @@ public class CourseInfoController {
     }
 
 
-
     @GetMapping(value = "getAllWaitingOrFailedCourseCreate")
     @TeacherAuth
     public List<HashMap<String, Object>> getAllWaitingOrFailedCourseCreate(int teacherId) {
@@ -222,7 +221,7 @@ public class CourseInfoController {
     @TeacherAuth
     public List<HashMap<String, Object>> getAllWaitingOrFailedCourseRelease(int teacherId, String term) {
         Term termCu = Term.SPRING2019;
-        if(term!=null) termCu = Term.valueOf(term);
+        if (term != null) termCu = Term.valueOf(term);
 
         List<HashMap<String, Object>> result = new ArrayList<>();
         List<CourseRelease> courseReleaseList = teacherCourseService.getAllWaitingOrFailedCourseRelease(teacherId, termCu);
@@ -242,7 +241,7 @@ public class CourseInfoController {
     @TeacherAuth
     public List<HashMap<String, Object>> getAllGeneralCourse(int teacherId, String term) {
         Term termCu = Term.SPRING2019;
-        if(term!=null) termCu = Term.valueOf(term);
+        if (term != null) termCu = Term.valueOf(term);
 
         List<HashMap<String, Object>> result = new ArrayList<>();
         List<CourseRelease> courseReleaseList = teacherCourseService.getAllGeneralCourse(teacherId, termCu);
@@ -263,7 +262,7 @@ public class CourseInfoController {
     @TeacherAuth
     public List<HashMap<String, Object>> getAllReelectCourse(int teacherId, String term) {
         Term termCu = Term.SPRING2019;
-        if(term!=null) termCu = Term.valueOf(term);
+        if (term != null) termCu = Term.valueOf(term);
 
         List<HashMap<String, Object>> result = new ArrayList<>();
         List<CourseRelease> courseReleaseList = teacherCourseService.getAllReelectCourse(teacherId, termCu);
@@ -284,7 +283,7 @@ public class CourseInfoController {
     @TeacherAuth
     public List<HashMap<String, Object>> getAllBeginCourse(int teacherId, String term) {
         Term termCu = Term.SPRING2019;
-        if(term!=null) termCu = Term.valueOf(term);
+        if (term != null) termCu = Term.valueOf(term);
 
         List<HashMap<String, Object>> result = new ArrayList<>();
         List<CourseRelease> courseReleaseList = teacherCourseService.getAllBeginCourse(teacherId, termCu);
@@ -300,6 +299,23 @@ public class CourseInfoController {
         return result;
     }
 
+    @GetMapping(value = "getAllBeginClassByTerm")
+    @TeacherAuth
+    public List<HashMap<String, Object>> getAllBeginClassByTerm(int teacherId, String term) {
+        Term termCu = Term.valueOf(term);
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        List<CourseRelease> courseReleaseList = teacherCourseService.getAllOngoingCourse(teacherId, termCu);
+
+        for (CourseRelease courseRelease : courseReleaseList) {
+            HashMap<String, Object> courseReleaseJson = new HashMap<>();
+            courseReleaseJson.put("id", courseRelease.getId());
+            courseReleaseJson.put("name", courseRelease.getCourseCreate().getName());
+            result.add(courseReleaseJson);
+        }
+        return result;
+
+
+    }
 
 
 

@@ -25,10 +25,13 @@ public class StudentWork {
 //    private int homeworkId;                     //外键 提交作业题目的id
 
     @Column
-    private String attachment;                  //提交作业的path
+    @NonNull
+    private String name;
 
     @Column
-    private double score;                       //作业得分
+    @NonNull
+    private String path;                  //提交作业的path
+
 
 
     @ManyToOne( fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH})

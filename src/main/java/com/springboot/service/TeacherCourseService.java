@@ -21,13 +21,16 @@ public interface TeacherCourseService {
 
     List<CourseCreate> getAllWaitingOrFailedCourseCreate(int teacherId);
 
-    List<CourseRelease> getAllWaitingOrFailedCourseRelease(int teacherId,Term term);
+    List<CourseRelease> getAllWaitingOrFailedCourseRelease(int teacherId, Term term);
 
-    List<CourseRelease> getAllGeneralCourse(int teacherId,Term term);
+    List<CourseRelease> getAllGeneralCourse(int teacherId, Term term);
 
-    List<CourseRelease> getAllReelectCourse(int teacherId,Term term);
+    List<CourseRelease> getAllReelectCourse(int teacherId, Term term);
 
     List<CourseRelease> getAllBeginCourse(int teacherId, Term term);
+
+    List<CourseRelease> getAllOngoingCourse(int teacherId, Term term);
+
 
 
 

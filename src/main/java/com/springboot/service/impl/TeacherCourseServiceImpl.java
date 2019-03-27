@@ -142,5 +142,13 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
 
     }
 
+    @Override
+    public List<CourseRelease> getAllOngoingCourse(int teacherId, Term term) {
+        List<CourseRelease> courseReleaseListRE = courseReleaseDao.findAllCRBByTermAndTIDAndCouState(teacherId, term, CourseState.REELECT);
+        List<CourseRelease> courseReleaseListBE = courseReleaseDao.findAllCRBByTermAndTIDAndCouState(teacherId, term, CourseState.BEGIN);
+        courseReleaseListRE.addAll(courseReleaseListBE);
+        return courseReleaseListRE;
+    }
+
 
 }

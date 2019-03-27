@@ -42,6 +42,9 @@ public class CourseRelease {
     private CourseState courseState;
 
     @Column
+    private String courseScoreExcelPath;                    //成绩表的路径
+
+    @Column
     @NonNull
     private int limitNum;                   //限选人数
 
