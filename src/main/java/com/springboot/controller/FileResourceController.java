@@ -1,12 +1,11 @@
 package com.springboot.controller;
 
 import com.springboot.domain.CourseCreate;
+import com.springboot.domain.CourseRelease;
 import com.springboot.domain.CourseWare;
-import com.springboot.domain.StudentWork;
 import com.springboot.service.CourseStatisticsService;
 import com.springboot.service.CourseWareService;
 import com.springboot.service.TaskService;
-import com.springboot.utils.HandleFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -91,37 +90,39 @@ public class FileResourceController {
 
     @PostMapping(value = "uploadCourseScoreExcel")
     @ResponseBody
-    public String HandleUploadHomeworkScore(@RequestParam("file") MultipartFile file, int homeworkId) {
+    public String HandleUploadHomeworkScore(@RequestParam("file") MultipartFile file, String courseReleaseId) {
         if (!file.isEmpty()) {
+            int courseReleaseId1 = Integer.parseInt(courseReleaseId);
+            CourseRelease courseRelease = courseStatisticsService.getCourseReleaseById(courseReleaseId1);
 
+
+            String dirName = "target/classes/static/courseScoreExcel/" + courseReleaseId;
+            File courseCreatePath = new File(dirName);
+            if (!courseCreatePath.exists()) {
+                courseCreatePath.mkdirs();
+            }
+            String filePath = dirName + "/" + file.getOriginalFilename();
+            courseRelease.setCourseScoreExcelPath(filePath);
+            taskService.setCourseReleaseScoreExcelPath(courseRelease);
             try {
-
-                InputStream inputStream = file.getInputStream();
-                List<List<Object>> list = HandleFile.parseExcel(inputStream,file.getOriginalFilename());
-                List<StudentWork> studentWorkList = taskService.getAllStudentWork(homeworkId);
-
-                for (int i = 0; i < list.size(); i++) {
-                    List<Object> lo = list.get(i);
-                    int studentId = Integer.parseInt((String) lo.get(0));
-                    double score = Double.parseDouble((String) lo.get(1));
-                    for (StudentWork studentWork : studentWorkList) {
-                        if (studentWork.getId() == studentId) {
-                            taskService.setWorkScore(studentWork,score);
-                        }
-                    }
-
-                }
-
-                inputStream.close();
-            } catch (Exception e) {
+                BufferedOutputStream out = new BufferedOutputStream(
+                        new FileOutputStream(new File(
+                                filePath)));
+                out.write(file.getBytes());
+                out.flush();
+                out.close();
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
+                return "上传失," + e.getMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "上传失败," + e.getMessage();
             }
 
-
             return "上传成功";
-        }else {
-            return "文件为空";
+
         }
+        return "空文件";
 
 
 

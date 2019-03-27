@@ -2,8 +2,10 @@ package com.springboot.controller;
 
 
 import com.springboot.annotation.TeacherAuth;
+import com.springboot.domain.CourseRelease;
 import com.springboot.domain.Homework;
 import com.springboot.domain.StudentWork;
+import com.springboot.service.CourseStatisticsService;
 import com.springboot.service.TaskService;
 import com.springboot.utils.HandleFile;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,9 @@ public class HomeworkController {
 
     @Autowired
     TaskService taskService;
+
+    @Autowired
+    CourseStatisticsService courseStatisticsService;
 
     @PostMapping(value = "addHomework")
     @TeacherAuth
@@ -178,4 +183,17 @@ public class HomeworkController {
         }
     }
 
+
+    @GetMapping(value = "/getCourseScoreExcel")
+    public String getCourseScoreExcel(String courseReleaseId) {
+        int courseReleaseId1 = Integer.parseInt(courseReleaseId);
+        CourseRelease courseRelease = courseStatisticsService.getCourseReleaseById(courseReleaseId1);
+        if (courseRelease.getCourseScoreExcelPath() == null) {
+            return null;
+        }else {
+            return courseRelease.getCourseScoreExcelPath().substring(15);
+        }
+
+
+    }
 }

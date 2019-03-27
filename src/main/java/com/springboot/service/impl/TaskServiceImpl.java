@@ -50,11 +50,6 @@ public class TaskServiceImpl implements TaskService {
         return "添加成功";
     }
 
-    @Override
-    public void setWorkScore(StudentWork studentWork, double score) {
-        studentWork.setScore(score);
-        studentWorkDao.modifyStudentWork(studentWork);
-    }
 
     @Override
     public String addStudentWork(String path, int homeworkId, int courseReleaseId, int studentId,String name) {
@@ -81,6 +76,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<StudentWork> getAllStudentWork(int homeworkId) {
         return studentWorkDao.findAllStudentWorkByHomeworkId(homeworkId);
+    }
+
+    @Override
+    public void setCourseReleaseScoreExcelPath(CourseRelease courseRelease) {
+        courseReleaseDao.modifyCourseRelease(courseRelease);
+
     }
 
 

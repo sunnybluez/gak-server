@@ -1,6 +1,7 @@
 package com.springboot.service;
 
 
+import com.springboot.domain.CourseRelease;
 import com.springboot.domain.Homework;
 import com.springboot.domain.StudentWork;
 
@@ -12,7 +13,6 @@ public interface TaskService {
 
     String addHomework(int courseReleaseId, String title, String description, int finishTime);
 
-    void setWorkScore(StudentWork studentWork, double score);
 
 
     String addStudentWork(String path, int homeworkId, int courseReleaseId, int studentId,String name);
@@ -22,4 +22,6 @@ public interface TaskService {
     StudentWork getSingleStudentWork(int studentId,int courseReleaseId, int homeworkId);
 
     List<StudentWork> getAllStudentWork(int homeworkId);
+
+    void setCourseReleaseScoreExcelPath(CourseRelease courseRelease);
 }
