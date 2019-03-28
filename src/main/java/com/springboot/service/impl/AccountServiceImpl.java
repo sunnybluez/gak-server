@@ -1,8 +1,10 @@
 package com.springboot.service.impl;
 
+import com.springboot.dao.LoginRecordDao;
 import com.springboot.dao.RegisterUserDao;
 import com.springboot.dao.StudentDao;
 import com.springboot.dao.TeacherDao;
+import com.springboot.domain.LoginRecord;
 import com.springboot.domain.RegisterUser;
 import com.springboot.domain.Student;
 import com.springboot.domain.Teacher;
@@ -19,7 +21,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -36,6 +39,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
+    LoginRecordDao loginRecordDao;
 
 
     @Override
@@ -62,9 +68,11 @@ public class AccountServiceImpl implements AccountService {
             if (registerUser.getUserIdentity().equals(UserIdentity.STUDENT)) {
                 int studentId = studentDao.findByEmail(email).getId();
                 result.put("id", studentId);
+                logLogin(registerUser);
             } else if (registerUser.getUserIdentity().equals(UserIdentity.TEACHER)) {
                 int teacherId = teacherDao.findByEmail(email).getId();
                 result.put("id",teacherId);
+                logLogin(registerUser);
             }
 
         }
@@ -144,12 +152,49 @@ public class AccountServiceImpl implements AccountService {
         return "注销成功";
     }
 
+    @Override
+    public List<Integer> getRecentSevenLoginNum(UserIdentity userIdentity) {
+        List<LoginRecord> loginRecords = loginRecordDao.findAll();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<String> recentDays = getLastSevenDay();
+        int[] dateNum = {0,0,0,0,0,0,0};
+        for (LoginRecord loginRecord : loginRecords) {
+            for(int i = 0;i<recentDays.size();i++){
+                if (formatter.format(loginRecord.getDate()).equals(recentDays.get(i))&&
+                        loginRecord.getRegisterUser().getUserIdentity().equals(userIdentity)) {
+                    dateNum[i]++;
+                }
+            }
+
+        }
+        List<Integer> result = new ArrayList<>();
+        for(int i = 0;i<dateNum.length;i++) {
+            result.add(dateNum[i]);
+        }
+        return result;
+
+    }
+
+    public List<String> getLastSevenDay(){
+        Date now = new Date();
+        List<String> list = new ArrayList<>();
+        for(int i=-6;i<1;i++) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar c = Calendar.getInstance();
+            c.setTime(now);
+            c.add(Calendar.DATE, - i);
+            Date d = c.getTime();
+            list.add(formatter.format(d));
+        }
+        return list;
+    }
+
     public void sendSimpleMail(String userEmail, String token) {
         MimeMessage message = null;
         try {
             message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("1332901986@qq.com");
+            helper.setFrom("3101998985@qq.com");
             helper.setTo(userEmail);
             helper.setSubject("Gak TSS 注册验证");
 
@@ -163,4 +208,14 @@ public class AccountServiceImpl implements AccountService {
 
         javaMailSender.send(message);
     }
+
+
+    public void logLogin(RegisterUser registerUser) {
+        LoginRecord loginRecord = new LoginRecord(registerUser);
+        loginRecordDao.addLoginRecord(loginRecord);
+    }
+
+
+
+
 }

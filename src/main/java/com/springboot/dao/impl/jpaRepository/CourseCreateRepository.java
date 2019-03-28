@@ -11,4 +11,6 @@ public interface CourseCreateRepository extends JpaRepository<CourseCreate, Inte
 
     List<CourseCreate> findAllByTeacherIdAndState(int teacherId, ApproveState state);
 
+    List<CourseCreate> findAllByState(ApproveState state);
+
 }

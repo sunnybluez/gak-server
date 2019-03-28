@@ -6,6 +6,8 @@ import com.springboot.domain.StudentOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class StudentOperationDaoImpl implements StudentOperationDao {
 
@@ -15,5 +17,10 @@ public class StudentOperationDaoImpl implements StudentOperationDao {
     @Override
     public void addStudentOperation(StudentOperation studentOperation) {
         studentOperationRepository.save(studentOperation);
+    }
+
+    @Override
+    public List<StudentOperation> getStudentOperation(int studentId) {
+        return studentOperationRepository.findAllByStudentId(studentId);
     }
 }

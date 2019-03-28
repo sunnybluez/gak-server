@@ -10,6 +10,8 @@ import com.springboot.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ManagerServiceImpl implements ManagerService {
 
@@ -50,5 +52,15 @@ public class ManagerServiceImpl implements ManagerService {
             courseReleaseDao.modifyCourseRelease(courseRelease);
             return "审批不通过";
         }
+    }
+
+    @Override
+    public List<CourseCreate> getAllWaitingCourseCreate() {
+        return courseCreateDao.findAllByApproveState(ApproveState.WAITING);
+    }
+
+    @Override
+    public List<CourseRelease> getAllWaitingCourseRelease() {
+        return courseReleaseDao.findAllByApproveState(ApproveState.WAITING);
     }
 }

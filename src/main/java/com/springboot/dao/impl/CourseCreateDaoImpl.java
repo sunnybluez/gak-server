@@ -35,4 +35,10 @@ public class CourseCreateDaoImpl implements CourseCreateDao {
     public List<CourseCreate> findAllCreateCourseByTIdAndAppState(int teacherId, ApproveState state) {
         return courseCreateRepository.findAllByTeacherIdAndState(teacherId, state);
     }
+
+    @Override
+    public List<CourseCreate> findAllByApproveState(ApproveState approveState) {
+        return courseCreateRepository.findAllByState(approveState);
+    }
+
 }

@@ -23,6 +23,9 @@ public interface CourseReleaseDao {
 
     List<CourseRelease> findAllCRBByTermAndTIDAndCouState(int teacherId, Term term, CourseState courseState);
 
+    List<CourseRelease> findAllByApproveState(ApproveState approveState);
+
+    List<CourseRelease> findAllByTidAndAppState(int teacherId, ApproveState approveState);
 
 
 }

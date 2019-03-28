@@ -2,7 +2,9 @@ package com.springboot.service.impl;
 
 import com.springboot.dao.RegisterUserDao;
 import com.springboot.dao.StudentDao;
+import com.springboot.dao.StudentOperationDao;
 import com.springboot.domain.Student;
+import com.springboot.domain.StudentOperation;
 import com.springboot.enums.GradeType;
 import com.springboot.enums.SexType;
 import com.springboot.service.StudentService;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -20,6 +23,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private RegisterUserDao registerUserDao;
+
+    @Autowired
+    StudentOperationDao studentOperationDao;
 
     @Override
     public Integer getStudentId(String email) {
@@ -53,6 +59,11 @@ public class StudentServiceImpl implements StudentService {
         studentDao.modifyStudent(studentModify);
 
         return "修改成功";
+    }
+
+    @Override
+    public List<StudentOperation> getAllMyCourseOperationLog(int studentId) {
+        return studentOperationDao.getStudentOperation(studentId);
     }
 
 

@@ -11,6 +11,9 @@ import com.springboot.domain.Teacher;
 import com.springboot.enums.*;
 import com.springboot.service.TeacherCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -30,6 +33,8 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
     @Autowired
     CourseSelectDao courseSelectDao;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Override
     public String createCourse(int teacherId, String name, String description) {
@@ -42,6 +47,11 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
     @Override
     public List<CourseCreate> getCreateAndPassCourses(int teacherId) {
         return courseCreateDao.findAllCreateCourseByTIdAndAppState(teacherId,ApproveState.PASSED);
+    }
+
+    @Override
+    public List<CourseRelease> getReleaseAndPassCourses(int teacherId) {
+        return courseReleaseDao.findAllByTidAndAppState(teacherId, ApproveState.PASSED);
     }
 
     @Override
@@ -148,6 +158,42 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
         List<CourseRelease> courseReleaseListBE = courseReleaseDao.findAllCRBByTermAndTIDAndCouState(teacherId, term, CourseState.BEGIN);
         courseReleaseListRE.addAll(courseReleaseListBE);
         return courseReleaseListRE;
+    }
+
+    @Override
+    public String groupSendEmail(int courseReleaseId, String content, String subject) {
+
+        System.out.println(courseReleaseId);
+        List<CourseSelect> courseSelectList = courseSelectDao.findAllCSByCRIdAndState(courseReleaseId, SelectState.ONGOING);
+
+
+        List<String> studentEmails = new ArrayList<>();
+
+        for (CourseSelect courseSelect : courseSelectList) {
+            System.out.println(courseSelect.getId());
+            studentEmails.add(courseSelect.getStudent().getEmail());
+        }
+        groupSendEmail(studentEmails, content, subject);
+
+        return "success";
+    }
+
+    private void groupSendEmail(List<String> userEmails, String content, String subject) {
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();//直接生产一个实例
+        String users[] = new String[userEmails.size()];
+        userEmails.toArray(users);
+        System.out.println(userEmails);
+        mailSender.setHost("smtp.qq.com");
+        mailSender.setPassword("rvajlcemzwqldfej");
+        mailSender.setProtocol("smtp");
+        mailSender.setUsername("3101998985@qq.com");
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("3101998985@qq.com");
+        message.setTo(users); // 群发
+        message.setSubject(subject);
+        message.setText(content);
+        mailSender.send(message);
     }
 
 

@@ -1,8 +1,6 @@
 package com.springboot.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,6 +8,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class Manager {
 
 
@@ -18,9 +17,11 @@ public class Manager {
     private int id;
 
     @Column(length = 30,nullable = false)
+    @NonNull
     private String email;
 
     @Column(nullable = false)
+    @NonNull
     private String password;
 
 

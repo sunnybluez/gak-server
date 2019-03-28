@@ -17,4 +17,9 @@ public class ManagerDaoImpl implements ManagerDao {
         return managerRepository.findByEmail(email);
     }
 
+    @Override
+    public void addManager(Manager manager) {
+        managerRepository.save(manager);
+    }
+
 }

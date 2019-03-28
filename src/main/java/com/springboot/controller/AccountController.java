@@ -32,6 +32,7 @@ public class AccountController {
 //        System.out.println(identity);
 
         UserIdentity userIdentity = UserIdentity.valueOf(identity.toUpperCase());
+
         return accountService.login(email, password, userIdentity);
 
     }

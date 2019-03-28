@@ -54,5 +54,16 @@ public class CourseReleaseDaoImpl implements CourseReleaseDao {
         return courseReleaseRepository.findAllByTermAndTeacherIdAndCourseState(term, teacherId, courseState);
     }
 
+    @Override
+    public List<CourseRelease> findAllByApproveState(ApproveState approveState) {
+        return courseReleaseRepository.findAllByState(approveState);
+    }
+
+    @Override
+    public List<CourseRelease> findAllByTidAndAppState(int teacherId, ApproveState approveState) {
+//
+        return courseReleaseRepository.findAllByTeacherIdAndState(teacherId, approveState);
+    }
+
 
 }

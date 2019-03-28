@@ -17,5 +17,7 @@ public interface CourseCreateDao {
 
 //    List<CourseCreate> getAllCreateCourseByTidAndApprovaeState(int teacherId,App)
 
+    List<CourseCreate> findAllByApproveState(ApproveState approveState);
+
 //    List<>
 }

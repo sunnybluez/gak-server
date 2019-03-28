@@ -13,6 +13,8 @@ public interface TeacherCourseService {
 
     List<CourseCreate> getCreateAndPassCourses(int teacherId);
 
+    List<CourseRelease> getReleaseAndPassCourses(int teacherId);
+
     String releaseCourse(int courseCreateId, GradeType gradeType, int limitNum, Term term);
 
     String beginClass(int courseReleaseId);
@@ -31,7 +33,7 @@ public interface TeacherCourseService {
 
     List<CourseRelease> getAllOngoingCourse(int teacherId, Term term);
 
-
+    String groupSendEmail(int courseReleaseId,String content,String subject);
 
 
 

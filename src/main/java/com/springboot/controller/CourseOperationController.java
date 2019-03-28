@@ -92,4 +92,17 @@ public class CourseOperationController {
         return studentCourseService.reelectCourse(studentId, courseReleaseId);
     }
 
+    @PostMapping(value = "groupSendEmail")
+    @TeacherAuth
+    @ResponseBody
+    public String groupSendEmail(@RequestBody Map map) {
+
+        int courseReleaseId = (int) map.get("courseReleaseId");
+        String content = (String) map.get("content");
+        String subject = (String) map.get("subject");
+
+        return teacherCourseService.groupSendEmail(courseReleaseId,content,subject);
+    }
+
+
 }
